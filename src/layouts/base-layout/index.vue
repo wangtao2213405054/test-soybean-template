@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, watch } from "vue"
+import { computed, defineAsyncComponent } from "vue"
 import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@sa/materials"
 import type { LayoutMode } from "@sa/materials"
 import { useAppStore } from "@/store/modules/app"
@@ -100,10 +100,6 @@ function getSiderCollapsedWidth() {
 
   return w
 }
-
-watch(() => themeStore.header.height, () => {
-  console.log(themeStore.header.height, "appStore.siderCollapse")
-}, { immediate: true })
 </script>
 
 <template>

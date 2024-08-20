@@ -67,5 +67,7 @@ declare module "vue-router" {
     fixedIndexInTab?: number | null
     /** 如果设置了查询参数，进入路由时将自动携带这些参数 */
     query?: { key: string; value: string }[] | null
+    /** 此路由是否为首页路由 */
+    homepage?: boolean
   }
 }

@@ -90,6 +90,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     meta: {
       title: 'project',
       i18nKey: 'route.login',
+      homepage: true
     }
   },
   {
@@ -98,7 +99,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: 'layout.base$view.test',
     meta: {
       title: 'test',
-      i18nKey: 'route.iframe-page',
+      i18nKey: 'route.iframe-page'
     }
   }
 ];

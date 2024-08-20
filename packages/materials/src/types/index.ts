@@ -289,6 +289,10 @@ export type PageTabCssVarsProps = {
   primaryColorOpacity3: string
 }
 
+export interface RouterTypeToHomeProps {
+  layoutMode?: LayoutMode
+}
+
 export type PageTabCssVars = {
   [K in keyof PageTabCssVarsProps as `${Prefix}${KebabCase<K>}`]: string | number
 }

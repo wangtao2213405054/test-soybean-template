@@ -53,7 +53,7 @@ function getSiderWidth() {
   if (isVerticalMix.value && appStore.mixSiderFixed && childLevelMenus.value.length) {
     w += mixChildMenuWidth
   }
-  console.log(w, reverseHorizontalMix, "w")
+
   return w
 }
 
@@ -103,9 +103,9 @@ function getSiderCollapsedWidth() {
       <GlobalTab />
     </template>
     <template #sider>
-      <GlobalSider />
+      <GlobalSider :layout-mode="layoutMode" />
     </template>
-    <GlobalMenu />
+    <GlobalMenu :layout-mode="layoutMode" />
     <GlobalContent />
     <ThemeDrawer />
     <template #footer>
