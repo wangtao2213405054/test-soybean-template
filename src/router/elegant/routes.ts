@@ -82,5 +82,23 @@ export const generatedRoutes: GeneratedRoute[] = [
       constant: true,
       hideInMenu: true
     }
+  },
+  {
+    name: 'project',
+    path: '/project',
+    component: 'layout.home$view.project',
+    meta: {
+      title: 'project',
+      i18nKey: 'route.login',
+    }
+  },
+  {
+    name: 'test',
+    path: '/test',
+    component: 'layout.base$view.test',
+    meta: {
+      title: 'test',
+      i18nKey: 'route.iframe-page',
+    }
   }
 ];

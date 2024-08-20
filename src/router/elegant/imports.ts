@@ -8,10 +8,12 @@ import type { LastLevelRouteKey, RouteLayout } from "@elegant-router/types";
 
 import BaseLayout from "@/layouts/base-layout/index.vue";
 import BlankLayout from "@/layouts/blank-layout/index.vue";
+import HomeLayout from "@/layouts/home-layout/index.vue";
 
 export const layouts: Record<RouteLayout, RouteComponent | (() => Promise<RouteComponent>)> = {
   base: BaseLayout,
   blank: BlankLayout,
+  home: HomeLayout,
 };
 
 export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<RouteComponent>)> = {
@@ -21,4 +23,6 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   "iframe-page": () => import("@/views/_builtin/iframe-page/[url].vue"),
   login: () => import("@/views/_builtin/login/index.vue"),
   home: () => import("@/views/home/index.vue"),
+  project: () => import("@/views/project/index.vue"),
+  test: () => import("@/views/test/index.vue"),
 };

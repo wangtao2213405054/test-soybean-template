@@ -9,7 +9,7 @@ declare module "@elegant-router/types" {
   /**
    * route layout
    */
-  export type RouteLayout = "base" | "blank";
+  export type RouteLayout = "base" | "blank" | "home";
 
   /**
    * route map
@@ -23,6 +23,8 @@ declare module "@elegant-router/types" {
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
+    "project": "/project";
+    "test": "/test";
   };
 
   /**
@@ -60,6 +62,8 @@ declare module "@elegant-router/types" {
     | "home"
     | "iframe-page"
     | "login"
+    | "project"
+    | "test"
   >;
 
   /**
@@ -82,6 +86,8 @@ declare module "@elegant-router/types" {
     | "iframe-page"
     | "login"
     | "home"
+    | "project"
+    | "test"
   >;
 
   /**

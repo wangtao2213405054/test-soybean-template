@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, watch } from "vue"
+import { computed, defineAsyncComponent, reactive, ref } from "vue"
 import { AdminLayout, LAYOUT_SCROLL_EL_ID } from "@sa/materials"
 import type { LayoutMode } from "@sa/materials"
 import { useAppStore } from "@/store/modules/app"
@@ -13,7 +13,7 @@ import ThemeDrawer from "../modules/theme-drawer/index.vue"
 import { setupMixMenuContext } from "../context"
 
 defineOptions({
-  name: "BaseLayout"
+  name: "HomeLayout"
 })
 
 const appStore = useAppStore()
@@ -22,46 +22,19 @@ const { childLevelMenus, isActiveFirstLevelMenuHasChildren } = setupMixMenuConte
 
 const GlobalMenu = defineAsyncComponent(() => import("../modules/global-menu/index.vue"))
 
-const layoutMode = computed(() => {
-  const vertical: LayoutMode = "vertical"
-  const horizontal: LayoutMode = "horizontal"
-  return themeStore.layout.mode.includes(vertical) ? vertical : horizontal
+const layoutMode: LayoutMode = "horizontal"
+
+const headerProps = reactive({
+  showLogo: true,
+  showMenu: true,
+  showMenuToggler: false
 })
 
-const headerProps = computed(() => {
-  const { mode, reverseHorizontalMix } = themeStore.layout
+const siderVisible = ref<boolean>(false)
 
-  const headerPropsConfig: Record<UnionKey.ThemeLayoutMode, App.Global.HeaderProps> = {
-    vertical: {
-      showLogo: false,
-      showMenu: false,
-      showMenuToggler: true
-    },
-    "vertical-mix": {
-      showLogo: false,
-      showMenu: false,
-      showMenuToggler: false
-    },
-    horizontal: {
-      showLogo: true,
-      showMenu: true,
-      showMenuToggler: false
-    },
-    "horizontal-mix": {
-      showLogo: true,
-      showMenu: true,
-      showMenuToggler: reverseHorizontalMix && isActiveFirstLevelMenuHasChildren.value
-    }
-  }
+const isVerticalMix = ref<boolean>(false)
 
-  return headerPropsConfig[mode]
-})
-
-const siderVisible = computed(() => themeStore.layout.mode !== "horizontal")
-
-const isVerticalMix = computed(() => themeStore.layout.mode === "vertical-mix")
-
-const isHorizontalMix = computed(() => themeStore.layout.mode === "horizontal-mix")
+const isHorizontalMix = ref<boolean>(false)
 
 const siderWidth = computed(() => getSiderWidth())
 
@@ -80,7 +53,7 @@ function getSiderWidth() {
   if (isVerticalMix.value && appStore.mixSiderFixed && childLevelMenus.value.length) {
     w += mixChildMenuWidth
   }
-
+  console.log(w, reverseHorizontalMix, "w")
   return w
 }
 
@@ -100,10 +73,6 @@ function getSiderCollapsedWidth() {
 
   return w
 }
-
-watch(() => themeStore.header.height, () => {
-  console.log(themeStore.header.height, "appStore.siderCollapse")
-}, { immediate: true })
 </script>
 
 <template>
