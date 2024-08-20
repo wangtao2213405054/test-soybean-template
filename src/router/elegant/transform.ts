@@ -36,7 +36,6 @@ function transformElegantRouteToVueRoute(
   const VIEW_PREFIX = 'view.';
   const ROUTE_DEGREE_SPLITTER = '_';
   const FIRST_LEVEL_ROUTE_COMPONENT_SPLIT = '$';
-
   function isLayout(component: string) {
     return component.startsWith(LAYOUT_PREFIX);
   }
@@ -153,7 +152,6 @@ function transformElegantRouteToVueRoute(
   }
 
   vueRoutes.unshift(vueRoute);
-
   return vueRoutes;
 }
 

@@ -1,6 +1,6 @@
-import type { CustomRoute } from "@elegant-router/types"
-import { layouts, views } from "../elegant/imports"
-import { getRoutePath, transformElegantRoutesToVueRoutes } from "../elegant/transform"
+import type { RouteRecordRaw } from "vue-router"
+
+const BlankLayout = () => import("@/layouts/blank-layout/index.vue")
 
 /**
  * 根路由配置
@@ -8,10 +8,10 @@ import { getRoutePath, transformElegantRoutesToVueRoutes } from "../elegant/tran
  * - 定义了根路径 `/` 并重定向到配置中的默认主页路由。
  * - 该路由为常量路由，不会被动态修改。
  */
-export const ROOT_ROUTE: CustomRoute = {
+export const ROOT_ROUTE: RouteRecordRaw = {
   name: "root",
   path: "/",
-  redirect: getRoutePath(import.meta.env.VITE_ROUTE_HOME) || "/home",
+  redirect: "/home",
   meta: {
     title: "root",
     constant: true
@@ -24,10 +24,10 @@ export const ROOT_ROUTE: CustomRoute = {
  * - 定义了捕获所有未匹配路径的路由，并显示 404 页面。
  * - 该路由为常量路由，必须在 Vue Router 中配置。
  */
-const NOT_FOUND_ROUTE: CustomRoute = {
+const NOT_FOUND_ROUTE: RouteRecordRaw = {
   name: "not-found",
   path: "/:pathMatch(.*)*",
-  component: "layout.blank$view.404",
+  component: BlankLayout,
   meta: {
     title: "not-found",
     constant: true
@@ -39,14 +39,64 @@ const NOT_FOUND_ROUTE: CustomRoute = {
  *
  * - 包含必须作为常量配置在 Vue Router 中的内置路由。
  */
-const builtinRoutes: CustomRoute[] = [ROOT_ROUTE, NOT_FOUND_ROUTE]
-
-/**
- * 创建内置的 Vue 路由
- *
- * - 将内置路由列表转换为 Vue Router 可识别的路由配置。
- * - 使用布局和视图组件来构建最终的路由结构。
- */
-export function createBuiltinVueRoutes() {
-  return transformElegantRoutesToVueRoutes(builtinRoutes, layouts, views)
-}
+export const builtinRoutes: RouteRecordRaw[] = [
+  ROOT_ROUTE,
+  {
+    path: "/403",
+    component: BlankLayout,
+    meta: {
+      title: "403"
+    },
+    children: [
+      {
+        name: "403",
+        path: "",
+        component: () => import("@/views/_builtin/403/index.vue"),
+        meta: {
+          title: "403",
+          constant: true,
+          hideInMenu: true
+        }
+      }
+    ]
+  },
+  {
+    path: "/404",
+    component: BlankLayout,
+    meta: {
+      title: "404"
+    },
+    children: [
+      {
+        name: "404",
+        path: "",
+        component: () => import("@/views/_builtin/404/index.vue"),
+        meta: {
+          title: "404",
+          constant: true,
+          hideInMenu: true
+        }
+      }
+    ]
+  },
+  {
+    path: "/500",
+    component: BlankLayout,
+    meta: {
+      title: "500"
+    },
+    children: [
+      {
+        name: "500",
+        path: "",
+        component: () => import("@/views/_builtin/500/index.vue"),
+        meta: {
+          title: "500",
+          constant: true,
+          hideInMenu: true
+        }
+      }
+    ]
+  },
+  NOT_FOUND_ROUTE
+]

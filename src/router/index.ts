@@ -6,7 +6,7 @@ import {
   createWebHashHistory,
   createWebHistory
 } from "vue-router"
-import { createBuiltinVueRoutes } from "./routes/builtin"
+import { builtinRoutes } from "./routes/builtin"
 import { createRouterGuard } from "./guard"
 
 // 从环境变量中获取路由历史模式和基础 URL
@@ -31,7 +31,7 @@ const historyCreatorMap: Record<Env.RouterHistoryMode, (base?: string) => Router
  */
 export const router = createRouter({
   history: historyCreatorMap[VITE_ROUTER_HISTORY_MODE](VITE_BASE_URL),
-  routes: createBuiltinVueRoutes()
+  routes: builtinRoutes
 })
 
 /**

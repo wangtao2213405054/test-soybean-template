@@ -15,39 +15,6 @@ import type { GeneratedRoute } from '@elegant-router/types';
  */
 export const generatedRoutes: GeneratedRoute[] = [
   {
-    name: '403',
-    path: '/403',
-    component: 'layout.blank$view.403',
-    meta: {
-      title: '403',
-      i18nKey: 'route.403',
-      constant: true,
-      hideInMenu: true
-    }
-  },
-  {
-    name: '404',
-    path: '/404',
-    component: 'layout.blank$view.404',
-    meta: {
-      title: '404',
-      i18nKey: 'route.404',
-      constant: true,
-      hideInMenu: true
-    }
-  },
-  {
-    name: '500',
-    path: '/500',
-    component: 'layout.blank$view.500',
-    meta: {
-      title: '500',
-      i18nKey: 'route.500',
-      constant: true,
-      hideInMenu: true
-    }
-  },
-  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',

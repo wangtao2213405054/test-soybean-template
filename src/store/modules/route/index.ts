@@ -273,7 +273,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     const vueRoutes = getAuthVueRoutes(sortRoutes)
 
     resetVueRoutes()
-
+    console.log(vueRoutes, "11223344")
     addRoutesToVueRouter(vueRoutes)
 
     getGlobalMenus(sortRoutes)
