@@ -127,9 +127,7 @@ function getCssVarByTokens(tokens: App.Theme.BaseToken) {
     }
   }
 
-  const styleStr = styles.join(";")
-
-  return styleStr
+  return styles.join(";")
 }
 
 /**
