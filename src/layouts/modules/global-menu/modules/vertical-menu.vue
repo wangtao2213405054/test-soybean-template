@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { SimpleScrollbar } from "@sa/materials"
+import { type RouterTypeToHomeProps, SimpleScrollbar } from "@sa/materials"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
 import { useRouteStore } from "@/store/modules/route"
@@ -10,6 +10,10 @@ import { GLOBAL_SIDER_MENU_ID } from "@/constants/app"
 
 defineOptions({
   name: "VerticalMenu"
+})
+
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
 })
 
 const route = useRoute()
@@ -24,9 +28,7 @@ const selectedKey = computed(() => {
   const { hideInMenu, activeMenu } = route.meta
   const name = route.name as string
 
-  const routeName = (hideInMenu ? activeMenu : name) || name
-
-  return routeName
+  return (hideInMenu ? activeMenu : name) || name
 })
 
 const expandedKeys = ref<string[]>([])
@@ -46,6 +48,9 @@ watch(
   },
   { immediate: true }
 )
+
+const menu = computed(() => routeStore.menus.filter(item => props.layoutMode ? item.homepage : !item.homepage))
+
 </script>
 
 <template>
@@ -58,7 +63,7 @@ watch(
         :collapsed="appStore.siderCollapse"
         :collapsed-width="themeStore.sider.collapsedWidth"
         :collapsed-icon-size="22"
-        :options="routeStore.menus"
+        :options="menu"
         :inverted="inverted"
         :indent="18"
         @update:value="routerPushByKeyWithMetaQuery"

@@ -198,6 +198,8 @@ declare namespace App {
       icon?: () => VNode
       /** The menu children */
       children?: Menu[]
+      /** 是否为首页路由 */
+      homepage?: boolean
     }
 
     type Breadcrumb = Omit<Menu, "children"> & {

@@ -10,7 +10,9 @@ defineOptions({
   name: "GlobalSider"
 })
 
-const props = defineProps<RouterTypeToHomeProps>()
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
+})
 
 const appStore = useAppStore()
 const themeStore = useThemeStore()

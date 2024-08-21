@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import type { RouteKey } from "@elegant-router/types"
-import { SimpleScrollbar } from "@sa/materials"
+import { type RouterTypeToHomeProps, SimpleScrollbar } from "@sa/materials"
 import { GLOBAL_HEADER_MENU_ID, GLOBAL_SIDER_MENU_ID } from "@/constants/app"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
@@ -12,6 +12,10 @@ import { useMixMenuContext } from "../../../context"
 
 defineOptions({
   name: "ReversedHorizontalMixMenu"
+})
+
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
 })
 
 const route = useRoute()
@@ -31,9 +35,7 @@ const selectedKey = computed(() => {
   const { hideInMenu, activeMenu } = route.meta
   const name = route.name as string
 
-  const routeName = (hideInMenu ? activeMenu : name) || name
-
-  return routeName
+  return (hideInMenu ? activeMenu : name) || name
 })
 
 function handleSelectMixMenu(key: RouteKey) {
@@ -61,6 +63,9 @@ watch(
   },
   { immediate: true }
 )
+
+const menu = computed(() => firstLevelMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
+const childMenus = computed(() => childLevelMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
 </script>
 
 <template>
@@ -68,7 +73,7 @@ watch(
     <NMenu
       mode="horizontal"
       :value="activeFirstLevelMenuKey"
-      :options="firstLevelMenus"
+      :options="menu"
       :indent="18"
       responsive
       @update:value="handleSelectMixMenu"
@@ -83,7 +88,7 @@ watch(
         :collapsed="appStore.siderCollapse"
         :collapsed-width="themeStore.sider.collapsedWidth"
         :collapsed-icon-size="22"
-        :options="childLevelMenus"
+        :options="childMenus"
         :indent="18"
         @update:value="routerPushByKeyWithMetaQuery"
       />

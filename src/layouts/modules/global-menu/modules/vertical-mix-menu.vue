@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import { SimpleScrollbar } from "@sa/materials"
+import { type RouterTypeToHomeProps, SimpleScrollbar } from "@sa/materials"
 import { useBoolean } from "@sa/hooks"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
@@ -15,6 +15,10 @@ import GlobalLogo from "../../global-logo/index.vue"
 
 defineOptions({
   name: "VerticalMenuMix"
+})
+
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
 })
 
 const route = useRoute()
@@ -60,9 +64,7 @@ const selectedKey = computed(() => {
   const { hideInMenu, activeMenu } = route.meta
   const name = route.name as string
 
-  const routeName = (hideInMenu ? activeMenu : name) || name
-
-  return routeName
+  return (hideInMenu ? activeMenu : name) || name
 })
 
 const expandedKeys = ref<string[]>([])
@@ -82,13 +84,16 @@ watch(
   },
   { immediate: true }
 )
+
+const menu = computed(() => allMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
+const childMenus = computed(() => childLevelMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
 </script>
 
 <template>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <div class="h-full flex" @mouseleave="handleResetActiveMenu">
       <FirstLevelMenu
-        :menus="allMenus"
+        :menus="menu"
         :active-menu-key="activeFirstLevelMenuKey"
         :inverted="inverted"
         :sider-collapse="appStore.siderCollapse"
@@ -121,7 +126,7 @@ watch(
               v-model:expanded-keys="expandedKeys"
               mode="vertical"
               :value="selectedKey"
-              :options="childLevelMenus"
+              :options="childMenus"
               :collapsed="appStore.siderCollapse"
               :collapsed-width="themeStore.sider.collapsedWidth"
               :collapsed-icon-size="22"

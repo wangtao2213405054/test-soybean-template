@@ -14,7 +14,17 @@ defineOptions({
   name: "GlobalMenu"
 })
 
-const props = defineProps<RouterTypeToHomeProps>()
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
+})
+
+const currentProps = computed(() => {
+  if (props.layoutMode) {
+    return { layoutMode: props.layoutMode }
+  } else {
+    return {}
+  }
+})
 
 const appStore = useAppStore()
 const themeStore = useThemeStore()
@@ -26,7 +36,6 @@ const activeMenu = computed(() => {
     horizontal: HorizontalMenu,
     "horizontal-mix": themeStore.layout.reverseHorizontalMix ? ReversedHorizontalMixMenu : HorizontalMixMenu
   }
-
   return menuMap[props.layoutMode || themeStore.layout.mode]
 })
 
@@ -36,7 +45,7 @@ const reRenderVertical = computed(
 </script>
 
 <template>
-  <component :is="activeMenu" :key="reRenderVertical" />
+  <component :is="activeMenu" :key="reRenderVertical" v-bind="currentProps" />
 </template>
 
 <style scoped></style>
