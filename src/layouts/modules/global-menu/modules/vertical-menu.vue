@@ -49,8 +49,7 @@ watch(
   { immediate: true }
 )
 
-const menu = computed(() => routeStore.menus.filter(item => props.layoutMode ? item.homepage : !item.homepage))
-
+const menu = computed(() => routeStore.menus.filter((item) => (props.layoutMode ? item.homepage : !item.homepage)))
 </script>
 
 <template>

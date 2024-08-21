@@ -5,9 +5,9 @@ import { GLOBAL_HEADER_MENU_ID, GLOBAL_SIDER_MENU_ID } from "@/constants/app"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
 import { useRouterPush } from "@/hooks/common/router"
+import type { RouterTypeToHomeProps } from "~/packages/materials"
 import FirstLevelMenu from "../components/first-level-menu.vue"
 import { useMixMenuContext } from "../../../context"
-import type { RouterTypeToHomeProps } from "~/packages/materials"
 
 defineOptions({
   name: "HorizontalMixMenu"
@@ -38,8 +38,10 @@ function handleSelectMixMenu(menu: App.Global.Menu) {
   }
 }
 
-const menu = computed(() => allMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
-const childMenus = computed(() => childLevelMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
+const menu = computed(() => allMenus.value.filter((item) => (props.layoutMode ? item.homepage : !item.homepage)))
+const childMenus = computed(() =>
+  childLevelMenus.value.filter((item) => (props.layoutMode ? item.homepage : !item.homepage))
+)
 </script>
 
 <template>

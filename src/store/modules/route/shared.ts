@@ -140,7 +140,7 @@ function getGlobalMenuByBaseRoute(route: RouteLocationNormalizedLoaded | Elegant
     routeKey: name as RouteKey,
     routePath: path as RouteMap[RouteKey],
     icon: SvgIconVNode({ icon, localIcon, fontSize: iconFontSize || 20 }),
-    homepage: !!route.meta?.homepage
+    homepage: Boolean(route.meta?.homepage)
   }
 
   return menu

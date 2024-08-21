@@ -21,9 +21,8 @@ const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
 const currentProps = computed(() => {
   if (props.layoutMode) {
     return { layoutMode: props.layoutMode }
-  } else {
-    return {}
   }
+  return {}
 })
 
 const appStore = useAppStore()

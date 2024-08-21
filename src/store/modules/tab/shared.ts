@@ -68,7 +68,6 @@ export function getTabByRoute(route: App.Global.TabRoute) {
   const { icon, localIcon } = getRouteIcons(route)
 
   const label = i18nKey ? $t(i18nKey) : title
-
   const tab: App.Global.Tab = {
     id: getTabIdByRoute(route),
     label,
@@ -78,7 +77,8 @@ export function getTabByRoute(route: App.Global.TabRoute) {
     fixedIndex: fixedIndexInTab,
     icon,
     localIcon,
-    i18nKey
+    i18nKey,
+    homepage: Boolean(route.meta?.homepage)
   }
 
   return tab
@@ -115,7 +115,6 @@ export function getRouteIcons(route: App.Global.TabRoute) {
 export function getDefaultHomeTab(router: Router, homeRouteName: LastLevelRouteKey) {
   const homeRoutePath = getRoutePath(homeRouteName)
   const i18nLabel = $t(`route.${homeRouteName}`)
-
   let homeTab: App.Global.Tab = {
     id: getRoutePath(homeRouteName),
     label: i18nLabel || homeRouteName,
@@ -203,12 +202,10 @@ export function getFixedTabIds(tabs: App.Global.Tab[]) {
  * @param tabs Tabs 列表
  */
 function updateTabsLabel(tabs: App.Global.Tab[]) {
-  const updated = tabs.map((tab) => ({
+  return tabs.map((tab) => ({
     ...tab,
     label: tab.newLabel || tab.oldLabel || tab.label
   }))
-
-  return updated
 }
 
 /**

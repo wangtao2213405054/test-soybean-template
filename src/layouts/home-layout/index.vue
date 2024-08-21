@@ -100,7 +100,7 @@ function getSiderCollapsedWidth() {
       <GlobalHeader v-bind="headerProps" />
     </template>
     <template #tab>
-      <GlobalTab />
+      <GlobalTab :layout-mode="layoutMode" />
     </template>
     <template #sider>
       <GlobalSider :layout-mode="layoutMode" />

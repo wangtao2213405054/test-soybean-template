@@ -250,6 +250,8 @@ declare namespace App {
       localIcon?: string
       /** I18n key */
       i18nKey?: I18n.I18nKey | null
+      /** home page */
+      homepage?: boolean
     }
 
     /** Form rule */

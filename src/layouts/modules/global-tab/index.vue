@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { nextTick, reactive, ref, watch } from "vue"
+import { computed, nextTick, reactive, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useElementBounding } from "@vueuse/core"
-import { PageTab } from "@sa/materials"
+import { PageTab, type RouterTypeToHomeProps } from "@sa/materials"
 import BetterScroll from "@/components/custom/better-scroll.vue"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
@@ -12,6 +12,10 @@ import ContextMenu from "./context-menu.vue"
 
 defineOptions({
   name: "GlobalTab"
+})
+
+const props = withDefaults(defineProps<RouterTypeToHomeProps>(), {
+  layoutMode: undefined
 })
 
 const route = useRoute()
@@ -86,7 +90,7 @@ async function handleCloseTab(tab: App.Global.Tab) {
 }
 
 async function refresh() {
-  appStore.reloadPage(500)
+  await appStore.reloadPage(500)
 }
 
 interface DropdownConfig {
@@ -159,6 +163,10 @@ watch(
   }
 )
 
+const tabs = computed(() => {
+  return tabStore.tabs.filter((item) => (props.layoutMode ? item.homepage : !item.homepage))
+})
+
 // init
 init()
 </script>
@@ -177,7 +185,7 @@ init()
           :class="[themeStore.tab.mode === 'chrome' ? 'items-end' : 'items-center gap-12px']"
         >
           <PageTab
-            v-for="tab in tabStore.tabs"
+            v-for="tab in tabs"
             :key="tab.id"
             :[TAB_DATA_ID]="tab.id"
             :mode="themeStore.tab.mode"

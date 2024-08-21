@@ -52,7 +52,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
 
     tabStore.cacheTabs()
-    routeStore.resetStore()
+    await routeStore.resetStore()
   }
 
   /**

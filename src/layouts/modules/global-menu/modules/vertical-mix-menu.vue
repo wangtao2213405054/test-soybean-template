@@ -85,8 +85,10 @@ watch(
   { immediate: true }
 )
 
-const menu = computed(() => allMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
-const childMenus = computed(() => childLevelMenus.value.filter(item => props.layoutMode ? item.homepage : !item.homepage))
+const menu = computed(() => allMenus.value.filter((item) => (props.layoutMode ? item.homepage : !item.homepage)))
+const childMenus = computed(() =>
+  childLevelMenus.value.filter((item) => (props.layoutMode ? item.homepage : !item.homepage))
+)
 </script>
 
 <template>

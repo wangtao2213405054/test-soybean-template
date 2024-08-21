@@ -194,7 +194,7 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
   async function clearRightTabs(tabId: string) {
     const isHomeTab = tabId === homeTab.value?.id
     if (isHomeTab) {
-      clearTabs()
+      await clearTabs()
       return
     }
 
