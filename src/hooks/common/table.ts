@@ -1,27 +1,36 @@
-import { computed, effectScope, onScopeDispose, reactive, ref, watch } from "vue"
 import type { Ref } from "vue"
+import { computed, effectScope, onScopeDispose, reactive, ref, watch } from "vue"
 import type { PaginationProps } from "naive-ui"
 import { jsonClone } from "@sa/utils"
 import { useBoolean, useHookTable } from "@sa/hooks"
 import { useAppStore } from "@/store/modules/app"
 import { $t } from "@/locales"
 
+// 定义表格数据类型
 type TableData = NaiveUI.TableData
+// 定义获取表格数据的类型
 type GetTableData<A extends NaiveUI.TableApiFn> = NaiveUI.GetTableData<A>
+// 定义表格列的类型
 type TableColumn<T> = NaiveUI.TableColumn<T>
 
+// 使用自定义的 useTable hook 函数
 export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTableConfig<A>) {
+  // 创建一个 effectScope，用于管理副作用
   const scope = effectScope()
+  // 获取应用状态管理的 store
   const appStore = useAppStore()
 
+  // 计算属性，判断是否为移动设备
   const isMobile = computed(() => appStore.isMobile)
 
+  // 从配置中获取 API 函数、参数、是否立即加载和是否显示总数
   const { apiFn, apiParams, immediate, showTotal } = config
 
+  // 定义选择和展开列的键
   const SELECTION_KEY = "__selection__"
-
   const EXPAND_KEY = "__expand__"
 
+  // 使用自定义的 useHookTable hook 来处理表格的状态和数据
   const {
     loading,
     empty,
@@ -40,9 +49,10 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     transformer: (res) => {
       const { records = [], current = 1, size = 10, total = 0 } = res.data || {}
 
-      // Ensure that the size is greater than 0, If it is less than 0, it will cause paging calculation errors.
+      // 确保每页大小大于 0，否则会导致分页计算错误
       const pageSize = size <= 0 ? 10 : size
 
+      // 给每条记录添加索引
       const recordsWithIndex = records.map((item, index) => {
         return {
           ...item,
@@ -97,15 +107,14 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
         }
       })
 
-      const filteredColumns = checks
+      return checks
         .filter((item) => item.checked)
         .map((check) => columnMap.get(check.key) as TableColumn<GetTableData<A>>)
-
-      return filteredColumns
     },
     onFetched: async (transformed) => {
       const { pageNum, pageSize, total } = transformed
 
+      // 更新分页信息
       updatePagination({
         page: pageNum,
         pageSize,
@@ -115,6 +124,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     immediate
   })
 
+  // 初始化分页属性
   const pagination: PaginationProps = reactive({
     page: 1,
     pageSize: 10,
@@ -123,23 +133,25 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     onUpdatePage: async (page: number) => {
       pagination.page = page
 
+      // 更新搜索参数并获取数据
       updateSearchParams({
         current: page,
         size: pagination.pageSize!
       })
 
-      getData()
+      await getData()
     },
     onUpdatePageSize: async (pageSize: number) => {
       pagination.pageSize = pageSize
       pagination.page = 1
 
+      // 更新搜索参数并获取数据
       updateSearchParams({
         current: pagination.page,
         size: pageSize
       })
 
-      getData()
+      await getData()
     },
     ...(showTotal
       ? {
@@ -148,7 +160,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
       : {})
   })
 
-  // this is for mobile, if the system does not support mobile, you can use `pagination` directly
+  // 针对移动设备的分页设置
   const mobilePagination = computed(() => {
     const p: PaginationProps = {
       ...pagination,
@@ -159,20 +171,22 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     return p
   })
 
+  // 更新分页属性
   function updatePagination(update: Partial<PaginationProps>) {
     Object.assign(pagination, update)
   }
 
   /**
-   * get data by page number
+   * 根据页码获取数据
    *
-   * @param pageNum the page number. default is 1
+   * @param pageNum 页码，默认值为 1
    */
   async function getDataByPage(pageNum: number = 1) {
     updatePagination({
       page: pageNum
     })
 
+    // 更新搜索参数并获取数据
     updateSearchParams({
       current: pageNum,
       size: pagination.pageSize!
@@ -181,6 +195,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     await getData()
   }
 
+  // 在应用语言发生变化时重新加载列
   scope.run(() => {
     watch(
       () => appStore.locale,
@@ -190,10 +205,12 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     )
   })
 
+  // 在组件卸载时停止 effectScope
   onScopeDispose(() => {
     scope.stop()
   })
 
+  // 返回表格相关的数据和方法
   return {
     loading,
     empty,
@@ -212,19 +229,24 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
   }
 }
 
+// 使用自定义的 useTableOperate hook 函数
 export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>, getData: () => Promise<void>) {
+  // 控制抽屉的显示和隐藏
   const { bool: drawerVisible, setTrue: openDrawer, setFalse: closeDrawer } = useBoolean()
 
+  // 操作类型，默认为 "add"
   const operateType = ref<NaiveUI.TableOperateType>("add")
 
+  // 打开抽屉进行添加操作
   function handleAdd() {
     operateType.value = "add"
     openDrawer()
   }
 
-  /** the editing row data */
+  /** 编辑中的数据 */
   const editingData: Ref<T | null> = ref(null)
 
+  // 打开抽屉进行编辑操作
   function handleEdit(id: T["id"]) {
     operateType.value = "edit"
     const findItem = data.value.find((item) => item.id === id) || null
@@ -233,10 +255,10 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
     openDrawer()
   }
 
-  /** the checked row keys of table */
+  /** 被选中的行的键 */
   const checkedRowKeys = ref<string[]>([])
 
-  /** the hook after the batch delete operation is completed */
+  /** 批量删除操作完成后的钩子函数 */
   async function onBatchDeleted() {
     window.$message?.success($t("common.deleteSuccess"))
 
@@ -245,13 +267,14 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
     await getData()
   }
 
-  /** the hook after the delete operation is completed */
+  /** 删除操作完成后的钩子函数 */
   async function onDeleted() {
     window.$message?.success($t("common.deleteSuccess"))
 
     await getData()
   }
 
+  // 返回表格操作相关的数据和方法
   return {
     drawerVisible,
     openDrawer,
@@ -266,6 +289,7 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
   }
 }
 
+// 判断表格列是否有键
 function isTableColumnHasKey<T>(column: TableColumn<T>): column is NaiveUI.TableColumnWithKey<T> {
   return Boolean((column as NaiveUI.TableColumnWithKey<T>).key)
 }

@@ -84,12 +84,44 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'manage',
+    path: '/manage',
+    component: 'layout.home',
+    meta: {
+      title: 'manage',
+      i18nKey: 'route.manage',
+      homepage: true
+    },
+    children: [
+      {
+        name: 'manage_menu',
+        path: '/manage/menu',
+        component: 'view.manage_menu',
+        meta: {
+          title: 'manage_menu',
+          i18nKey: 'route.manage_menu',
+          homepage: true
+        }
+      },
+      {
+        name: 'manage_role',
+        path: '/manage/role',
+        component: 'view.manage_role',
+        meta: {
+          title: 'manage_role',
+          i18nKey: 'route.manage_role',
+          homepage: true
+        }
+      }
+    ]
+  },
+  {
     name: 'project',
     path: '/project',
     component: 'layout.home$view.project',
     meta: {
       title: 'project',
-      i18nKey: 'route.login',
+      i18nKey: 'route.project',
       homepage: true
     }
   },
@@ -99,7 +131,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: 'layout.base$view.test',
     meta: {
       title: 'test',
-      i18nKey: 'route.iframe-page'
+      i18nKey: 'route.test'
     }
   }
 ];
