@@ -47,7 +47,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     apiParams,
     columns: config.columns,
     transformer: (res) => {
-      const { records = [], current = 1, size = 10, total = 0 } = res.data || {}
+      const { records = [], page: current = 1, pageSize: size = 10, total = 0 } = res.data || {}
 
       // 确保每页大小大于 0，否则会导致分页计算错误
       const pageSize = size <= 0 ? 10 : size

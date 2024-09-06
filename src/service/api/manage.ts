@@ -49,8 +49,9 @@ export function fetchGetUserList(params?: Api.SystemManage.UserSearchParams) {
  */
 export function fetchGetMenuList() {
   return request<Api.SystemManage.MenuList>({
-    url: "/systemManage/getMenuList/v2", // 请求的 URL 地址
-    method: "get" // 请求的方法，GET 表示获取数据
+    url: "/manage/menu/list",
+    method: "POST",
+    data: {}
   })
 }
 

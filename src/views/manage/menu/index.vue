@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import type { Ref } from "vue"
 import { NButton, NPopconfirm, NTag } from "naive-ui"
 import { useBoolean } from "@sa/hooks"
@@ -128,7 +128,7 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       }
     },
     {
-      key: "parentId",
+      key: "nodeId",
       title: $t("page.manage.menu.parentId"),
       width: 90,
       align: "center"
@@ -168,6 +168,10 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       )
     }
   ]
+})
+
+watch(() => data, (newData) => {
+  console.log(newData, "112233")
 })
 
 const { checkedRowKeys, onBatchDeleted, onDeleted } = useTableOperate(data, getData)

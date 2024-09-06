@@ -8,9 +8,9 @@ declare namespace Api {
     /** 分页的公共参数 */
     interface PaginatingCommonParams {
       /** 当前页码 */
-      current: number
+      page: number
       /** 每页大小 */
-      size: number
+      pageSize: number
       /** 总记录数 */
       total: number
     }
