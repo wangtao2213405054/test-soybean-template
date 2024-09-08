@@ -1,12 +1,11 @@
 <script setup lang="tsx">
-import { ref, watch } from "vue"
+import { ref } from "vue"
 import type { Ref } from "vue"
 import { NButton, NPopconfirm, NTag } from "naive-ui"
 import { useBoolean } from "@sa/hooks"
-import { fetchGetAllPages, fetchGetMenuList } from "@/service/api"
+import { batchDeleteMenuInfo, deleteMenuInfo, fetchGetAllPages, fetchGetMenuList } from "@/service/api"
 import { useAppStore } from "@/store/modules/app"
 import { useTable, useTableOperate } from "@/hooks/common/table"
-import { $t } from "@/locales"
 import { yesOrNoRecord } from "@/constants/common"
 import { enableStatusRecord, menuTypeRecord } from "@/constants/business"
 import SvgIcon from "@/components/custom/svg-icon.vue"
@@ -20,6 +19,7 @@ const wrapperRef = ref<HTMLElement | null>(null)
 
 const { columns, columnChecks, data, loading, pagination, getData, getDataByPage } = useTable({
   apiFn: fetchGetMenuList,
+  apiParams: { page: 1, pageSize: 20 },
   columns: () => [
     {
       type: "selection",
@@ -37,38 +37,34 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       align: "center",
       width: 80,
       render: (row) => {
-        const tagMap: Record<Api.SystemManage.MenuType, NaiveUI.ThemeColor> = {
+        const tagMap: Record<SystemManage.MenuType, NaiveUI.ThemeColor> = {
           1: "default",
           2: "primary"
         }
 
-        const label = $t(menuTypeRecord[row.menuType])
+        const label = menuTypeRecord[row.menuType]
 
         return <NTag type={tagMap[row.menuType]}>{label}</NTag>
       }
     },
     {
       key: "menuName",
-      title: $t("page.manage.menu.menuName"),
+      title: "菜单名称",
       align: "center",
       minWidth: 120,
       render: (row) => {
-        const { i18nKey, menuName } = row
-
-        const label = i18nKey ? $t(i18nKey) : menuName
-
-        return <span>{label}</span>
+        return <span>{row.menuName}</span>
       }
     },
     {
       key: "icon",
-      title: $t("page.manage.menu.icon"),
+      title: "图标",
       align: "center",
       width: 60,
       render: (row) => {
-        const icon = row.iconType === "1" ? row.icon : undefined
+        const icon = row.iconType === 1 ? row.icon : undefined
 
-        const localIcon = row.iconType === "2" ? row.icon : undefined
+        const localIcon = row.iconType === 2 ? row.icon : undefined
 
         return (
           <div class="flex-center">
@@ -79,39 +75,38 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
     },
     {
       key: "routeName",
-      title: $t("page.manage.menu.routeName"),
+      title: "路由名称",
       align: "center",
       minWidth: 120
     },
     {
       key: "routePath",
-      title: $t("page.manage.menu.routePath"),
+      title: "路由路径",
       align: "center",
       minWidth: 120
     },
     {
       key: "status",
-      title: $t("page.manage.menu.menuStatus"),
+      title: "菜单状态",
       align: "center",
       width: 80,
       render: (row) => {
         if (row.status === null) {
           return null
         }
-
+        const status = row.status ? 1 : 2
         const tagMap: Record<Api.Common.EnableStatus, NaiveUI.ThemeColor> = {
           1: "success",
           2: "warning"
         }
+        const label = enableStatusRecord[status]
 
-        const label = $t(enableStatusRecord[row.status])
-
-        return <NTag type={tagMap[row.status]}>{label}</NTag>
+        return <NTag type={tagMap[status]}>{label}</NTag>
       }
     },
     {
       key: "hideInMenu",
-      title: $t("page.manage.menu.hideInMenu"),
+      title: "隐藏菜单",
       align: "center",
       width: 80,
       render: (row) => {
@@ -122,44 +117,38 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
           N: "default"
         }
 
-        const label = $t(yesOrNoRecord[hide])
+        const label = yesOrNoRecord[hide]
 
         return <NTag type={tagMap[hide]}>{label}</NTag>
       }
     },
     {
-      key: "nodeId",
-      title: $t("page.manage.menu.parentId"),
-      width: 90,
-      align: "center"
-    },
-    {
       key: "order",
-      title: $t("page.manage.menu.order"),
+      title: "排序",
       align: "center",
       width: 60
     },
     {
       key: "operate",
-      title: $t("common.operate"),
+      title: "操作",
       align: "center",
       width: 230,
       render: (row) => (
         <div class="flex-center justify-end gap-8px">
-          {row.menuType === "1" && (
+          {row.menuType === 1 && (
             <NButton type="primary" ghost size="small" onClick={() => handleAddChildMenu(row)}>
-              {$t("page.manage.menu.addChildMenu")}
+              新增子菜单
             </NButton>
           )}
           <NButton type="primary" ghost size="small" onClick={() => handleEdit(row)}>
-            {$t("common.edit")}
+            编辑
           </NButton>
           <NPopconfirm onPositiveClick={() => handleDelete(row.id)}>
             {{
-              default: () => $t("common.confirmDelete"),
+              default: () => "确认删除吗？",
               trigger: () => (
                 <NButton type="error" ghost size="small">
-                  {$t("common.delete")}
+                  删除
                 </NButton>
               )
             }}
@@ -168,10 +157,6 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       )
     }
   ]
-})
-
-watch(() => data, (newData) => {
-  console.log(newData, "112233")
 })
 
 const { checkedRowKeys, onBatchDeleted, onDeleted } = useTableOperate(data, getData)
@@ -184,30 +169,32 @@ function handleAdd() {
 }
 
 async function handleBatchDelete() {
-  // request
-  console.log(checkedRowKeys.value)
+  const { error } = await batchDeleteMenuInfo(checkedRowKeys.value)
 
-  await onBatchDeleted()
+  if (!error) {
+    await onBatchDeleted()
+  }
 }
 
-function handleDelete(id: number) {
-  // request
-  console.log(id)
+async function handleDelete(id: number) {
+  const { error } = await deleteMenuInfo(id)
 
-  onDeleted()
+  if (!error) {
+    await onDeleted()
+  }
 }
 
 /** the edit menu data or the parent menu data when adding a child menu */
-const editingData: Ref<Api.SystemManage.Menu | null> = ref(null)
+const editingData: Ref<SystemManage.Menu | null> = ref(null)
 
-function handleEdit(item: Api.SystemManage.Menu) {
+function handleEdit(item: SystemManage.Menu) {
   operateType.value = "edit"
   editingData.value = { ...item }
 
   openModal()
 }
 
-function handleAddChildMenu(item: Api.SystemManage.Menu) {
+function handleAddChildMenu(item: SystemManage.Menu) {
   operateType.value = "addChild"
 
   editingData.value = { ...item }
@@ -232,7 +219,7 @@ init()
 
 <template>
   <div ref="wrapperRef" class="flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <NCard :title="$t('page.manage.menu.title')" :bordered="false" size="small" class="sm:flex-1-hidden card-wrapper">
+    <NCard title="菜单列表" :bordered="false" size="small" class="sm:flex-1-hidden card-wrapper">
       <template #header-extra>
         <TableHeaderOperation
           v-model:columns="columnChecks"

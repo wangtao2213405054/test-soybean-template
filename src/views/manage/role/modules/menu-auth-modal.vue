@@ -57,7 +57,7 @@ const pageSelectOptions = computed(() => {
   return opts
 })
 
-const tree = shallowRef<Api.SystemManage.MenuTree[]>([])
+const tree = shallowRef<SystemManage.MenuTree[]>([])
 
 async function getTree() {
   const { error, data } = await fetchGetMenuTree()

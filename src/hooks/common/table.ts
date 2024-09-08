@@ -47,23 +47,23 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     apiParams,
     columns: config.columns,
     transformer: (res) => {
-      const { records = [], page: current = 1, pageSize: size = 10, total = 0 } = res.data || {}
+      const { records = [], page = 1, pageSize = 10, total = 0 } = res.data || {}
 
       // 确保每页大小大于 0，否则会导致分页计算错误
-      const pageSize = size <= 0 ? 10 : size
+      const size = pageSize <= 0 ? 10 : pageSize
 
       // 给每条记录添加索引
       const recordsWithIndex = records.map((item, index) => {
         return {
           ...item,
-          index: (current - 1) * pageSize + index + 1
+          index: (page - 1) * pageSize + index + 1
         }
       })
 
       return {
         data: recordsWithIndex,
-        pageNum: current,
-        pageSize,
+        pageNum: page,
+        pageSize: size,
         total
       }
     },
@@ -127,7 +127,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
   // 初始化分页属性
   const pagination: PaginationProps = reactive({
     page: 1,
-    pageSize: 10,
+    pageSize: 20,
     showSizePicker: true,
     pageSizes: [10, 15, 20, 25, 30],
     onUpdatePage: async (page: number) => {
@@ -135,8 +135,8 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
 
       // 更新搜索参数并获取数据
       updateSearchParams({
-        current: page,
-        size: pagination.pageSize!
+        page,
+        pageSize: pagination.pageSize!
       })
 
       await getData()
@@ -147,8 +147,8 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
 
       // 更新搜索参数并获取数据
       updateSearchParams({
-        current: pagination.page,
-        size: pageSize
+        page: pagination.page,
+        pageSize
       })
 
       await getData()
@@ -188,8 +188,8 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
 
     // 更新搜索参数并获取数据
     updateSearchParams({
-      current: pageNum,
-      size: pagination.pageSize!
+      page: pageNum,
+      pageSize: pagination.pageSize!
     })
 
     await getData()
@@ -256,7 +256,7 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
   }
 
   /** 被选中的行的键 */
-  const checkedRowKeys = ref<string[]>([])
+  const checkedRowKeys = ref<number[]>([])
 
   /** 批量删除操作完成后的钩子函数 */
   async function onBatchDeleted() {

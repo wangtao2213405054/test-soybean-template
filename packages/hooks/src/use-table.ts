@@ -100,7 +100,6 @@ export default function useHookTable<A extends ApiFn, T, C>(config: TableConfig<
     const response = await apiFn(formattedParams)
 
     const transformed = transformer(response as Awaited<ReturnType<A>>)
-
     data.value = transformed.data
 
     setEmpty(transformed.data.length === 0)

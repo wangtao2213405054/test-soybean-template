@@ -18,11 +18,11 @@ import { $t } from "@/locales"
  *
  * @param record
  */
-export function transformRecordToOption<T extends Record<string, string>>(record: T) {
-  return Object.entries(record).map(([value, label]) => ({
-    value,
+export function transformRecordToOption<T extends Record<string | number, string>>(record: T) {
+  return Object.entries(record).map(([key, label]) => ({
+    value: Number.isNaN(Number(key)) ? key : Number(key), // 检查 key 是否是数字类型，保留原始类型
     label
-  })) as CommonType.Option<keyof T>[]
+  }))
 }
 
 /**
