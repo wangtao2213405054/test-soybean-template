@@ -90,6 +90,7 @@ declare namespace SystemManage {
     | "multiTab"
     | "fixedIndexInTab"
     | "query"
+    | "homepage"
   >
 
   type MenuInfo = {

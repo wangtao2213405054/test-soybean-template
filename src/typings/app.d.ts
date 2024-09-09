@@ -598,7 +598,7 @@ declare namespace App {
         required: string
         userName: FormMsg
         phone: FormMsg
-        pwd: FormMsg
+        password: FormMsg
         confirmPwd: FormMsg
         code: FormMsg
         email: FormMsg

@@ -32,7 +32,7 @@ const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
   return {
     phone: formRules.phone,
     code: formRules.code,
-    password: formRules.pwd,
+    password: formRules.password,
     confirmPassword: createConfirmPwdRule(model.password)
   }
 })

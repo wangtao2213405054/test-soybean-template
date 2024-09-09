@@ -73,6 +73,7 @@ type Model = Pick<
   | "activeMenu"
   | "multiTab"
   | "fixedIndexInTab"
+  | "homepage"
 > & {
   query: NonNullable<SystemManage.Menu["query"]>
   buttons: NonNullable<SystemManage.Menu["buttons"]>
@@ -107,6 +108,7 @@ function createDefaultModel(): Model {
     activeMenu: null,
     multiTab: false,
     fixedIndexInTab: null,
+    homepage: false,
     query: [],
     buttons: [],
     interfaces: []
@@ -162,6 +164,10 @@ const layoutOptions: CommonType.Option[] = [
   {
     label: "blank",
     value: "blank"
+  },
+  {
+    label: "home",
+    value: "home"
   }
 ]
 
@@ -204,6 +210,11 @@ function handleUpdateRoutePathByRouteName() {
   } else {
     model.routePath = ""
   }
+}
+
+/** 根据布局内容更新 homepage */
+function handleUpdateRouteHomepage() {
+  model.homepage = model.layout === "home"
 }
 
 /**
@@ -258,6 +269,14 @@ watch(
   () => model.routeName,
   () => {
     handleUpdateRoutePathByRouteName()
+  }
+)
+
+/** 监听 layout 的变化，自动更新 homepage */
+watch(
+  () => model.layout,
+  () => {
+    handleUpdateRouteHomepage()
   }
 )
 </script>
@@ -382,8 +401,8 @@ watch(
             <NDynamicInput v-model:value="model.buttons" :on-create="handleCreatePermission">
               <template #default="{ value }">
                 <div class="ml-8px flex-y-center flex-1 gap-12px">
-                  <NInput v-model:value="value.code" placeholder="请输入按钮编码" class="flex-1" />
-                  <NInput v-model:value="value.description" placeholder="请输入按钮描述" class="flex-1" />
+                  <NInput v-model:value="value['code']" placeholder="请输入按钮编码" class="flex-1" />
+                  <NInput v-model:value="value['description']" placeholder="请输入按钮描述" class="flex-1" />
                 </div>
               </template>
               <template #action="{ index, create, remove }">
@@ -402,8 +421,8 @@ watch(
             <NDynamicInput v-model:value="model.interfaces" :on-create="handleCreatePermission">
               <template #default="{ value }">
                 <div class="ml-8px flex-y-center flex-1 gap-12px">
-                  <NInput v-model:value="value.code" placeholder="请输入接口编码" class="flex-1" />
-                  <NInput v-model:value="value.description" placeholder="请输入接口描述" class="flex-1" />
+                  <NInput v-model:value="value['code']" placeholder="请输入接口编码" class="flex-1" />
+                  <NInput v-model:value="value['description']" placeholder="请输入接口描述" class="flex-1" />
                 </div>
               </template>
               <template #action="{ index, create, remove }">

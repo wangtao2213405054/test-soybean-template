@@ -1,7 +1,7 @@
 import { ref, toValue } from "vue"
 import type { ComputedRef, Ref } from "vue"
 import type { FormInst } from "naive-ui"
-import { REG_CODE_SIX, REG_EMAIL, REG_PHONE, REG_PWD, REG_USER_NAME } from "@/constants/reg"
+import { REG_CODE_SIX, REG_EMAIL, REG_PHONE, REG_PWD } from "@/constants/reg"
 
 export function useFormRules() {
   const patternRules = {
@@ -15,11 +15,11 @@ export function useFormRules() {
       message: "手机号格式不正确",
       trigger: "change"
     },
-    // pwd: {
-    //   pattern: REG_PWD,
-    //   message: "密码格式不正确，6-18位字符，包含字母、数字、下划线",
-    //   trigger: "change"
-    // },
+    password: {
+      pattern: REG_PWD,
+      message: "密码格式不正确，6-18位字符，包含字母、数字",
+      trigger: "change"
+    },
     code: {
       pattern: REG_CODE_SIX,
       message: "验证码格式不正确",
@@ -35,7 +35,7 @@ export function useFormRules() {
   const formRules = {
     userName: [createRequiredRule("请输入用户名"), patternRules.userName],
     phone: [createRequiredRule("请输入手机号"), patternRules.phone],
-    // pwd: [createRequiredRule("请输入密码"), patternRules.pwd],
+    password: [createRequiredRule("请输入密码"), patternRules.password],
     code: [createRequiredRule("请输入验证码"), patternRules.code],
     email: [createRequiredRule("请输入邮箱"), patternRules.email]
   } satisfies Record<string, App.Global.FormRule[]>
@@ -51,12 +51,12 @@ export function useFormRules() {
   }
 
   /** create a rule for confirming the password */
-  function createConfirmPwdRule(pwd: string | Ref<string> | ComputedRef<string>) {
+  function createConfirmPwdRule(password: string | Ref<string> | ComputedRef<string>) {
     const confirmPwdRule: App.Global.FormRule[] = [
       { required: true, message: "请输入确认密码" },
       {
         asyncValidator: (rule, value) => {
-          if (value.trim() !== "" && value !== toValue(pwd)) {
+          if (value.trim() !== "" && value !== toValue(password)) {
             return Promise.reject(rule.message)
           }
           return Promise.resolve()
