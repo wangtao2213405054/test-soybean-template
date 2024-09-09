@@ -1,7 +1,6 @@
 import type { AxiosResponse } from "axios"
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from "@sa/axios"
 import { useAuthStore } from "@/store/modules/auth"
-import { $t } from "@/locales"
 import { localStg } from "@/utils/storage"
 import { getServiceBaseURL } from "@/utils/service"
 import { handleRefreshToken, showErrorMsg } from "./shared"
@@ -67,9 +66,9 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
         window.addEventListener("beforeunload", handleLogout)
 
         window.$dialog?.error({
-          title: $t("common.error"), // 错误提示的标题
+          title: "错误", // 错误提示的标题
           content: response.data.message, // 错误提示的内容
-          positiveText: $t("common.confirm"), // 确认按钮的文本
+          positiveText: "确认", // 确认按钮的文本
           maskClosable: false, // 禁止点击遮罩层关闭
           closeOnEsc: false, // 禁止按 Esc 键关闭
           onPositiveClick() {

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { $t } from "@/locales"
-
 defineOptions({ name: "SearchFooter" })
 </script>
 
@@ -8,16 +6,16 @@ defineOptions({ name: "SearchFooter" })
   <div class="h-44px flex-y-center gap-14px px-24px">
     <span class="flex-y-center">
       <icon-mdi-keyboard-return class="operate-shadow operate-item" />
-      <span>{{ $t("common.confirm") }}</span>
+      <span>确认</span>
     </span>
     <span class="flex-y-center">
       <icon-mdi-arrow-up-thin class="operate-shadow operate-item" />
       <icon-mdi-arrow-down-thin class="operate-shadow operate-item" />
-      <span>{{ $t("common.switch") }}</span>
+      <span>切换</span>
     </span>
     <span class="flex-y-center">
       <icon-mdi-keyboard-esc class="operate-shadow operate-item" />
-      <span>{{ $t("common.close") }}</span>
+      <span>关闭</span>
     </span>
   </div>
 </template>

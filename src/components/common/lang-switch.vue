@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import { $t } from "@/locales"
 
 defineOptions({
   name: "LangSwitch"
@@ -28,7 +27,7 @@ const emit = defineEmits<Emits>()
 const tooltipContent = computed(() => {
   if (!props.showTooltip) return ""
 
-  return $t("icon.lang")
+  return "切换语言"
 })
 
 function changeLang(lang: App.I18n.LangType) {

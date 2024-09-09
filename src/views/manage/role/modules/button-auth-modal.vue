@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, shallowRef } from "vue"
-import { $t } from "@/locales"
+import { shallowRef } from "vue"
 
 defineOptions({
   name: "ButtonAuthModal"
@@ -20,8 +19,6 @@ const visible = defineModel<boolean>("visible", {
 function closeModal() {
   visible.value = false
 }
-
-const title = computed(() => $t("common.edit") + $t("page.manage.role.buttonAuth"))
 
 type ButtonConfig = {
   id: number
@@ -59,7 +56,7 @@ function handleSubmit() {
   console.log(checks.value, props.roleId)
   // request
 
-  window.$message?.success?.($t("common.modifySuccess"))
+  window.$message?.success?.("修改成功")
 
   closeModal()
 }
@@ -74,7 +71,7 @@ init()
 </script>
 
 <template>
-  <NModal v-model:show="visible" :title="title" preset="card" class="w-480px">
+  <NModal v-model:show="visible" title="编辑按钮权限" preset="card" class="w-480px">
     <NTree
       v-model:checked-keys="checks"
       :data="tree"
@@ -87,12 +84,8 @@ init()
     />
     <template #footer>
       <NSpace justify="end">
-        <NButton size="small" class="mt-16px" @click="closeModal">
-          {{ $t("common.cancel") }}
-        </NButton>
-        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">
-          {{ $t("common.confirm") }}
-        </NButton>
+        <NButton size="small" class="mt-16px" @click="closeModal">取消</NButton>
+        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">确认</NButton>
       </NSpace>
     </template>
   </NModal>

@@ -26,7 +26,7 @@ declare namespace SystemManage {
    * - "1": 男性
    * - "2": 女性
    */
-  type UserGender = "1" | "2"
+  type UserGender = 1 | 2
 
   /** 用户类型 */
   type User = Api.Common.CommonRecord<{

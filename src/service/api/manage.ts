@@ -74,7 +74,7 @@ export function editMenuInfo(data: SystemManage.MenuEdit) {
  * @returns 返回删除后的菜单
  */
 export function deleteMenuInfo(id: number) {
-  return request<SystemManage.Menu>({
+  return request<SystemManage.MenuList>({
     url: "/manage/menu/delete",
     method: "DELETE",
     data: { id }
@@ -87,7 +87,7 @@ export function deleteMenuInfo(id: number) {
  * @returns 返回删除后的菜单列表
  */
 export function batchDeleteMenuInfo(ids: number[]) {
-  return request<SystemManage.Menu>({
+  return request<SystemManage.MenuList>({
     url: "/manage/menu/batch/delete",
     method: "DELETE",
     data: { ids }

@@ -15,8 +15,8 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16))
 
 <template>
   <NSpace vertical :size="16">
-    <NAlert :title="$t('common.warning')" type="warning">
-      {{ $t("page.home.branchDesc") }}
+    <NAlert title="警告" type="warning">
+      为了方便大家开发和更新合并，我们对main分支的代码进行了精简，只保留了首页菜单，其余内容已移至example分支进行维护。预览地址显示的内容即为example分支的内容。
     </NAlert>
     <HeaderBanner />
     <CardData />

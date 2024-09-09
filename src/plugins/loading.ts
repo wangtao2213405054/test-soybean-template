@@ -1,6 +1,5 @@
 // @unocss-include
 import { getRgb } from "@sa/color"
-import { $t } from "@/locales"
 import { localStg } from "@/utils/storage"
 import systemLogo from "@/assets/svg-icon/logo.svg?raw"
 
@@ -42,7 +41,7 @@ export function setupLoading() {
       ${dot}
     </div>
   </div>
-  <h2 class="text-28px font-500 text-#646464">${$t("system.title")}</h2>
+  <h2 class="text-28px font-500 text-#646464">Soybean 管理系统</h2>
 </div>`
 
   // 将加载动画插入到页面中

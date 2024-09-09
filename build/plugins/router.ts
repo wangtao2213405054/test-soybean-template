@@ -28,8 +28,7 @@ export function setupElegantRouter() {
       const constantRoutes: RouteKey[] = ["login", "403", "404", "500"]
 
       const meta: Partial<RouteMeta> = {
-        title: key,
-        i18nKey: `route.${key}` as App.I18n.I18nKey
+        title: key
       }
 
       if (constantRoutes.includes(key)) {

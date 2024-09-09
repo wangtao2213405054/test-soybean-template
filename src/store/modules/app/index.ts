@@ -4,7 +4,7 @@ import { breakpointsTailwind, useBreakpoints, useEventListener, useTitle } from 
 import { useBoolean } from "@sa/hooks"
 import { SetupStoreId } from "@/enum"
 import { router } from "@/router"
-import { $t, setLocale } from "@/locales"
+import { setLocale } from "@/locales"
 import { setDayjsLocale } from "@/locales/dayjs"
 import { localStg } from "@/utils/storage"
 import { useRouteStore } from "../route"
@@ -76,11 +76,9 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
 
   /** 根据语言更新文档标题 */
   function updateDocumentTitleByLocale() {
-    const { i18nKey, title } = router.currentRoute.value.meta
+    const { title } = router.currentRoute.value.meta
 
-    const documentTitle = i18nKey ? $t(i18nKey) : title
-
-    useTitle(documentTitle)
+    useTitle(title)
   }
 
   function init() {

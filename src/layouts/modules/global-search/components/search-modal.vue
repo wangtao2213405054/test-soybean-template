@@ -4,7 +4,6 @@ import { useRouter } from "vue-router"
 import { onKeyStroke, useDebounceFn } from "@vueuse/core"
 import { useRouteStore } from "@/store/modules/route"
 import { useAppStore } from "@/store/modules/app"
-import { $t } from "@/locales"
 import SearchResult from "./search-result.vue"
 import SearchFooter from "./search-footer.vue"
 
@@ -27,7 +26,7 @@ const visible = defineModel<boolean>("show", { required: true })
 function search() {
   resultOptions.value = routeStore.searchMenus.filter((menu) => {
     const trimKeyword = keyword.value.toLocaleLowerCase().trim()
-    const title = (menu.i18nKey ? $t(menu.i18nKey) : menu.label).toLocaleLowerCase()
+    const title = menu.label.toLocaleLowerCase()
     return trimKeyword && title.includes(trimKeyword)
   })
   activePath.value = resultOptions.value[0]?.routePath ?? ""
@@ -102,16 +101,16 @@ registerShortcut()
     @after-leave="handleClose"
   >
     <NInputGroup>
-      <NInput v-model:value="keyword" clearable :placeholder="$t('common.keywordSearch')" @input="handleSearch">
+      <NInput v-model:value="keyword" clearable placeholder="请输入关键词搜索" @input="handleSearch">
         <template #prefix>
           <icon-uil-search class="text-15px text-#c2c2c2" />
         </template>
       </NInput>
-      <NButton v-if="isMobile" type="primary" ghost @click="handleClose">{{ $t("common.cancel") }}</NButton>
+      <NButton v-if="isMobile" type="primary" ghost @click="handleClose">取消</NButton>
     </NInputGroup>
 
     <div class="mt-20px">
-      <NEmpty v-if="resultOptions.length === 0" :description="$t('common.noData')" />
+      <NEmpty v-if="resultOptions.length === 0" description="无数据" />
       <SearchResult v-else v-model:path="activePath" :options="resultOptions" @enter="handleEnter" />
     </div>
     <template #footer>

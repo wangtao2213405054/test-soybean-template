@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from "vue"
-import { $t } from "@/locales"
 import { fetchGetAllPages, fetchGetMenuTree } from "@/service/api"
 
 defineOptions({
@@ -21,8 +20,6 @@ const visible = defineModel<boolean>("visible", {
 function closeModal() {
   visible.value = false
 }
-
-const title = computed(() => $t("common.edit") + $t("page.manage.role.menuAuth"))
 
 const home = shallowRef("")
 
@@ -79,7 +76,7 @@ function handleSubmit() {
   console.log(checks.value, props.roleId)
   // request
 
-  window.$message?.success?.($t("common.modifySuccess"))
+  window.$message?.success?.("修改成功")
 
   closeModal()
 }
@@ -99,9 +96,9 @@ watch(visible, (val) => {
 </script>
 
 <template>
-  <NModal v-model:show="visible" :title="title" preset="card" class="w-480px">
+  <NModal v-model:show="visible" title="编辑菜单权限" preset="card" class="w-480px">
     <div class="flex-y-center gap-16px pb-12px">
-      <div>{{ $t("page.manage.menu.home") }}</div>
+      <div>首页</div>
       <NSelect :value="home" :options="pageSelectOptions" size="small" class="w-160px" @update:value="updateHome" />
     </div>
     <NTree
@@ -116,12 +113,8 @@ watch(visible, (val) => {
     />
     <template #footer>
       <NSpace justify="end">
-        <NButton size="small" class="mt-16px" @click="closeModal">
-          {{ $t("common.cancel") }}
-        </NButton>
-        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">
-          {{ $t("common.confirm") }}
-        </NButton>
+        <NButton size="small" class="mt-16px" @click="closeModal">取消</NButton>
+        <NButton type="primary" size="small" class="mt-16px" @click="handleSubmit">确认</NButton>
       </NSpace>
     </template>
   </NModal>

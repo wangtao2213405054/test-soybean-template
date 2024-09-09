@@ -2,7 +2,6 @@
 import { computed } from "vue"
 import { themeSchemaRecord } from "@/constants/app"
 import { useThemeStore } from "@/store/modules/theme"
-import { $t } from "@/locales"
 import SettingItem from "../components/setting-item.vue"
 
 defineOptions({
@@ -33,7 +32,7 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
 </script>
 
 <template>
-  <NDivider>{{ $t("theme.themeSchema.title") }}</NDivider>
+  <NDivider>主题模式</NDivider>
   <div class="flex-col-stretch gap-16px">
     <div class="i-flex-center">
       <NTabs
@@ -50,14 +49,14 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
       </NTabs>
     </div>
     <Transition name="sider-inverted">
-      <SettingItem v-if="showSiderInverted" :label="$t('theme.sider.inverted')">
+      <SettingItem v-if="showSiderInverted" label="深色侧边栏">
         <NSwitch v-model:value="themeStore.sider.inverted" />
       </SettingItem>
     </Transition>
-    <SettingItem :label="$t('theme.grayscale')">
+    <SettingItem label="灰色模式">
       <NSwitch :value="themeStore.grayscale" @update:value="handleGrayscaleChange" />
     </SettingItem>
-    <SettingItem :label="$t('theme.colourWeakness')">
+    <SettingItem label="色弱模式">
       <NSwitch :value="themeStore.colourWeakness" @update:value="handleColourWeaknessChange" />
     </SettingItem>
   </div>

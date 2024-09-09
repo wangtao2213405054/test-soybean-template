@@ -3,7 +3,6 @@ import { NButton, NPopconfirm, NTag } from "naive-ui"
 import { fetchGetRoleList } from "@/service/api"
 import { useAppStore } from "@/store/modules/app"
 import { useTable, useTableOperate } from "@/hooks/common/table"
-import { $t } from "@/locales"
 import { enableStatusRecord } from "@/constants/business"
 import RoleOperateDrawer from "./modules/role-operate-drawer.vue"
 import RoleSearch from "./modules/role-search.vue"
@@ -39,30 +38,30 @@ const {
     },
     {
       key: "index",
-      title: $t("common.index"),
+      title: "序号",
       width: 64,
       align: "center"
     },
     {
       key: "roleName",
-      title: $t("page.manage.role.roleName"),
+      title: "角色名称",
       align: "center",
       minWidth: 120
     },
     {
       key: "roleCode",
-      title: $t("page.manage.role.roleCode"),
+      title: "角色编码",
       align: "center",
       minWidth: 120
     },
     {
       key: "roleDesc",
-      title: $t("page.manage.role.roleDesc"),
+      title: "角色描述",
       minWidth: 120
     },
     {
       key: "status",
-      title: $t("page.manage.role.roleStatus"),
+      title: "角色状态",
       align: "center",
       width: 100,
       render: (row) => {
@@ -75,27 +74,27 @@ const {
           2: "warning"
         }
 
-        const label = $t(enableStatusRecord[row.status])
+        const label = enableStatusRecord[row.status]
 
         return <NTag type={tagMap[row.status]}>{label}</NTag>
       }
     },
     {
       key: "operate",
-      title: $t("common.operate"),
+      title: "操作",
       align: "center",
       width: 130,
       render: (row) => (
         <div class="flex-center gap-8px">
           <NButton type="primary" ghost size="small" onClick={() => edit(row.id)}>
-            {$t("common.edit")}
+            编辑
           </NButton>
           <NPopconfirm onPositiveClick={() => handleDelete(row.id)}>
             {{
-              default: () => $t("common.confirmDelete"),
+              default: () => "确认删除吗？",
               trigger: () => (
                 <NButton type="error" ghost size="small">
-                  {$t("common.delete")}
+                  删除
                 </NButton>
               )
             }}
@@ -140,7 +139,7 @@ function edit(id: number) {
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <RoleSearch v-model:model="searchParams" @reset="resetSearchParams" @search="getDataByPage" />
-    <NCard :title="$t('page.manage.role.title')" :bordered="false" size="small" class="sm:flex-1-hidden card-wrapper">
+    <NCard title="角色列表" :bordered="false" size="small" class="sm:flex-1-hidden card-wrapper">
       <template #header-extra>
         <TableHeaderOperation
           v-model:columns="columnChecks"

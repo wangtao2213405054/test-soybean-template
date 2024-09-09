@@ -206,15 +206,6 @@ function handleUpdateRoutePathByRouteName() {
   }
 }
 
-/** 根据 routeName 更新 i18nKey */
-function handleUpdateI18nKeyByRouteName() {
-  if (model.routeName) {
-    model.i18nKey = `route.${model.routeName}` as App.I18n.I18nKey
-  } else {
-    model.i18nKey = null
-  }
-}
-
 /**
  * 创建权限项
  *
@@ -267,7 +258,6 @@ watch(
   () => model.routeName,
   () => {
     handleUpdateRoutePathByRouteName()
-    handleUpdateI18nKeyByRouteName()
   }
 )
 </script>

@@ -2,7 +2,6 @@
 import { computed, reactive, watch } from "vue"
 import { useBoolean } from "@sa/hooks"
 import { useFormRules, useNaiveForm } from "@/hooks/common/form"
-import { $t } from "@/locales"
 import { enableStatusOptions } from "@/constants/business"
 import MenuAuthModal from "./menu-auth-modal.vue"
 import ButtonAuthModal from "./button-auth-modal.vue"
@@ -15,7 +14,7 @@ interface Props {
   /** the type of operation */
   operateType: NaiveUI.TableOperateType
   /** the edit row data */
-  rowData?: Api.SystemManage.Role | null
+  rowData?: SystemManage.Role | null
 }
 
 const props = defineProps<Props>()
@@ -37,13 +36,13 @@ const { bool: buttonAuthVisible, setTrue: openButtonAuthModal } = useBoolean()
 
 const title = computed(() => {
   const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t("page.manage.role.addRole"),
-    edit: $t("page.manage.role.editRole")
+    add: "新增角色",
+    edit: "编辑角色"
   }
   return titles[props.operateType]
 })
 
-type Model = Pick<Api.SystemManage.Role, "roleName" | "roleCode" | "roleDesc" | "status">
+type Model = Pick<SystemManage.Role, "roleName" | "roleCode" | "roleDesc" | "status">
 
 const model: Model = reactive(createDefaultModel())
 
@@ -83,7 +82,7 @@ function closeDrawer() {
 async function handleSubmit() {
   await validate()
   // request
-  window.$message?.success($t("common.updateSuccess"))
+  window.$message?.success("更新成功")
   closeDrawer()
   emit("submitted")
 }
@@ -100,31 +99,31 @@ watch(visible, () => {
   <NDrawer v-model:show="visible" display-directive="show" :width="360">
     <NDrawerContent :title="title" :native-scrollbar="false" closable>
       <NForm ref="formRef" :model="model" :rules="rules">
-        <NFormItem :label="$t('page.manage.role.roleName')" path="roleName">
-          <NInput v-model:value="model.roleName" :placeholder="$t('page.manage.role.form.roleName')" />
+        <NFormItem label="角色名称" path="roleName">
+          <NInput v-model:value="model.roleName" placeholder="请输入角色名称" />
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleCode')" path="roleCode">
-          <NInput v-model:value="model.roleCode" :placeholder="$t('page.manage.role.form.roleCode')" />
+        <NFormItem label="角色编码" path="roleCode">
+          <NInput v-model:value="model.roleCode" placeholder="请输入角色编码" />
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleStatus')" path="status">
+        <NFormItem label="角色状态" path="status">
           <NRadioGroup v-model:value="model.status">
-            <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
+            <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="item.label" />
           </NRadioGroup>
         </NFormItem>
-        <NFormItem :label="$t('page.manage.role.roleDesc')" path="roleDesc">
-          <NInput v-model:value="model.roleDesc" :placeholder="$t('page.manage.role.form.roleDesc')" />
+        <NFormItem label="角色描述" path="roleDesc">
+          <NInput v-model:value="model.roleDesc" placeholder="请输入角色描述" />
         </NFormItem>
       </NForm>
       <NSpace v-if="isEdit">
-        <NButton @click="openMenuAuthModal">{{ $t("page.manage.role.menuAuth") }}</NButton>
+        <NButton @click="openMenuAuthModal">菜单权限</NButton>
         <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-        <NButton @click="openButtonAuthModal">{{ $t("page.manage.role.buttonAuth") }}</NButton>
+        <NButton @click="openButtonAuthModal">按钮权限</NButton>
         <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
       </NSpace>
       <template #footer>
         <NSpace :size="16">
-          <NButton @click="closeDrawer">{{ $t("common.cancel") }}</NButton>
-          <NButton type="primary" @click="handleSubmit">{{ $t("common.confirm") }}</NButton>
+          <NButton @click="closeDrawer">取消</NButton>
+          <NButton type="primary" @click="handleSubmit">确认</NButton>
         </NSpace>
       </template>
     </NDrawerContent>

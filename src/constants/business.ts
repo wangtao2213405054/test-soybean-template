@@ -7,9 +7,9 @@ export const enableStatusRecord: Record<Api.Common.EnableStatus, string> = {
 
 export const enableStatusOptions = transformRecordToOption(enableStatusRecord)
 
-export const userGenderRecord: Record<SystemManage.UserGender, App.I18n.I18nKey> = {
-  "1": "page.manage.user.gender.male",
-  "2": "page.manage.user.gender.female"
+export const userGenderRecord: Record<SystemManage.UserGender, string> = {
+  1: "男",
+  2: "女"
 }
 
 export const userGenderOptions = transformRecordToOption(userGenderRecord)

@@ -8,7 +8,6 @@ import { useRouterPush } from "@/hooks/common/router"
 import { fetchGetUserInfo, fetchLogin, getPublicKey } from "@/service/api/auth"
 import type { Auth } from "@/service/api/auth"
 import { localStg } from "@/utils/storage"
-import { $t } from "@/locales"
 import { useRouteStore } from "../route"
 import { useTabStore } from "../tab"
 import { clearAuthStorage, getToken } from "./shared"
@@ -97,8 +96,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
         if (routeStore.isInitAuthRoute) {
           window.$notification?.success({
-            title: $t("page.login.common.loginSuccess"),
-            content: $t("page.login.common.welcomeBack", { userName: userInfo.name }),
+            title: "登录成功",
+            content: `欢迎回来，${userInfo.name} ！`,
             duration: 4500
           })
         }

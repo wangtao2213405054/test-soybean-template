@@ -1,6 +1,5 @@
 import { useTitle } from "@vueuse/core"
 import type { Router } from "vue-router"
-import { $t } from "@/locales"
 
 /**
  * 创建文档标题守卫
@@ -11,17 +10,8 @@ import { $t } from "@/locales"
  */
 export function createDocumentTitleGuard(router: Router) {
   router.afterEach((to) => {
-    const { i18nKey, title } = to.meta
-
-    /**
-     * 根据 i18nKey 或 title 设置文档标题
-     *
-     * - 如果 i18nKey 存在，则使用国际化的标题
-     * - 否则使用静态标题
-     */
-    const documentTitle = i18nKey ? $t(i18nKey) : title
-
+    const { title } = to.meta
     // 使用 VueUse 提供的 useTitle 函数更新文档标题
-    useTitle(documentTitle)
+    useTitle(title)
   })
 }

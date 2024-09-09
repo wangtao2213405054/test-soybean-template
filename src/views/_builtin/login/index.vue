@@ -2,7 +2,6 @@
 import { computed } from "vue"
 import type { Component } from "vue"
 import { getPaletteColorByNumber, mixColor } from "@sa/color"
-import { $t } from "@/locales"
 import { useAppStore } from "@/store/modules/app"
 import { useThemeStore } from "@/store/modules/theme"
 import { loginModuleRecord } from "@/constants/app"
@@ -57,7 +56,7 @@ const bgColor = computed(() => {
       <div class="w-400px lt-sm:w-300px">
         <header class="flex-y-center justify-between">
           <SystemLogo class="text-64px text-primary lt-sm:text-48px" />
-          <h3 class="text-28px text-primary font-500 lt-sm:text-22px">{{ $t("system.title") }}</h3>
+          <h3 class="text-28px text-primary font-500 lt-sm:text-22px">Soybean 管理系统</h3>
           <div class="i-flex-col">
             <ThemeSchemaSwitch
               :theme-schema="themeStore.themeScheme"
@@ -74,7 +73,7 @@ const bgColor = computed(() => {
           </div>
         </header>
         <main class="pt-24px">
-          <h3 class="text-18px text-primary font-medium">{{ $t(activeModule.label) }}</h3>
+          <h3 class="text-18px text-primary font-medium">{{ activeModule.label }}</h3>
           <div class="pt-24px">
             <Transition :name="themeStore.page.animateMode" mode="out-in" appear>
               <component :is="activeModule.component" />

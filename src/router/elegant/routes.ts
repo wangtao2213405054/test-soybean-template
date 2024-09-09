@@ -88,8 +88,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     path: '/manage',
     component: 'layout.home',
     meta: {
-      title: 'manage',
-      i18nKey: 'route.manage',
+      title: '系统管理',
       homepage: true
     },
     children: [
@@ -98,8 +97,7 @@ export const generatedRoutes: GeneratedRoute[] = [
         path: '/manage/menu',
         component: 'view.manage_menu',
         meta: {
-          title: 'manage_menu',
-          i18nKey: 'route.manage_menu',
+          title: '菜单管理',
           homepage: true
         }
       },
@@ -108,8 +106,7 @@ export const generatedRoutes: GeneratedRoute[] = [
         path: '/manage/role',
         component: 'view.manage_role',
         meta: {
-          title: 'manage_role',
-          i18nKey: 'route.manage_role',
+          title: '角色管理',
           homepage: true
         }
       }
@@ -120,8 +117,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     path: '/project',
     component: 'layout.home$view.project',
     meta: {
-      title: 'project',
-      i18nKey: 'route.project',
+      title: '项目',
       homepage: true
     }
   },
@@ -130,8 +126,7 @@ export const generatedRoutes: GeneratedRoute[] = [
     path: '/test',
     component: 'layout.base$view.test',
     meta: {
-      title: 'test',
-      i18nKey: 'route.test'
+      title: '测试'
     }
   }
 ];

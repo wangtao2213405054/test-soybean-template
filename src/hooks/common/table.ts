@@ -4,7 +4,6 @@ import type { PaginationProps } from "naive-ui"
 import { jsonClone } from "@sa/utils"
 import { useBoolean, useHookTable } from "@sa/hooks"
 import { useAppStore } from "@/store/modules/app"
-import { $t } from "@/locales"
 
 // 定义表格数据类型
 type TableData = NaiveUI.TableData
@@ -80,13 +79,13 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
         } else if (column.type === "selection") {
           checks.push({
             key: SELECTION_KEY,
-            title: $t("common.check"),
+            title: "勾选",
             checked: true
           })
         } else if (column.type === "expand") {
           checks.push({
             key: EXPAND_KEY,
-            title: $t("common.expandColumn"),
+            title: "展开列",
             checked: true
           })
         }
@@ -155,7 +154,7 @@ export function useTable<A extends NaiveUI.TableApiFn>(config: NaiveUI.NaiveTabl
     },
     ...(showTotal
       ? {
-          prefix: (page) => $t("datatable.itemCount", { total: page.itemCount })
+          prefix: (page) => `共 ${page.itemCount} 条`
         }
       : {})
   })
@@ -260,7 +259,7 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
 
   /** 批量删除操作完成后的钩子函数 */
   async function onBatchDeleted() {
-    window.$message?.success($t("common.deleteSuccess"))
+    window.$message?.success("删除成功")
 
     checkedRowKeys.value = []
 
@@ -269,7 +268,7 @@ export function useTableOperate<T extends TableData = TableData>(data: Ref<T[]>,
 
   /** 删除操作完成后的钩子函数 */
   async function onDeleted() {
-    window.$message?.success($t("common.deleteSuccess"))
+    window.$message?.success("删除成功")
 
     await getData()
   }
