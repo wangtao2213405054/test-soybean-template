@@ -3,7 +3,7 @@ import { request } from "../request"
 /** 获取公钥 */
 export function getPublicKey() {
   return request<string>({
-    url: "auth/public/key",
+    url: "auth/getPublicKey",
     method: "GET"
   })
 }
@@ -16,7 +16,7 @@ export function getPublicKey() {
  */
 export function fetchLogin(username: string, password: string) {
   return request<Auth.LoginToken>({
-    url: "/auth/user/login",
+    url: "/auth/userLogin",
     method: "POST",
     data: {
       username,
@@ -28,7 +28,7 @@ export function fetchLogin(username: string, password: string) {
 /** 获取用户信息 */
 export function fetchGetUserInfo() {
   return request<Auth.UserInfo>({
-    url: "/auth/user/info",
+    url: "/auth/getUserInfo",
     method: "GET"
   })
 }
@@ -40,7 +40,7 @@ export function fetchGetUserInfo() {
  */
 export function fetchRefreshToken(refreshToken: string) {
   return request<Auth.LoginToken>({
-    url: "/auth/refresh/token",
+    url: "/auth/refreshToken",
     method: "POST",
     data: {
       refreshToken

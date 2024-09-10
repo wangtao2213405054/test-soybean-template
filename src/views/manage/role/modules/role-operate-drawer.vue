@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from "vue"
+import { computed, reactive, ref, watch } from "vue"
 import { useBoolean } from "@sa/hooks"
 import { useFormRules, useNaiveForm } from "@/hooks/common/form"
 import { enableStatusOptions } from "@/constants/business"
@@ -34,6 +34,7 @@ const { formRef, validate, restoreValidation } = useNaiveForm()
 const { defaultRequiredRule } = useFormRules()
 const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean()
 const { bool: buttonAuthVisible, setTrue: openButtonAuthModal } = useBoolean()
+const { bool: interfaceAuthVisible, setTrue: openInterfaceAuthModal } = useBoolean()
 
 const title = computed(() => {
   const titles: Record<NaiveUI.TableOperateType, string> = {
@@ -63,11 +64,18 @@ const rules: Record<RuleKey, App.Global.FormRule> = {
 }
 
 const roleId = computed(() => props.rowData?.id || -1)
+const menuIds = ref<number[]>([])
+const buttonCodes = ref<str[]>([])
+const interfaceCodes = ref<str[]>([])
 
 const isEdit = computed(() => props.operateType === "edit")
 
 function handleInitModel() {
   Object.assign(model, createDefaultModel())
+
+  menuIds.value = []
+  buttonCodes.value = []
+  interfaceCodes.value = []
 
   if (props.operateType === "edit" && props.rowData) {
     Object.assign(model, props.rowData)
@@ -88,6 +96,15 @@ async function handleSubmit() {
   }
 }
 
+async function updateMenuIdsInfo(role: SystemManage.Role) {
+  menuIds.value = role.menuIds
+}
+
+async function updatePermissionInfo(role: SystemManage.Role) {
+  buttonCodes.value = role.buttonCodes
+  interfaceCodes.value = role.interfaceCodes
+}
+
 watch(visible, () => {
   if (visible.value) {
     handleInitModel()
@@ -100,7 +117,7 @@ watch(visible, () => {
   <NDrawer v-model:show="visible" display-directive="show" :width="360">
     <NDrawerContent :title="title" :native-scrollbar="false" closable>
       <NForm ref="formRef" :model="model" :rules="rules">
-        <NFormItem label="角色名称" path="roleName">
+        <NFormItem label="角色名称" path="name">
           <NInput v-model:value="model.name" placeholder="请输入角色名称" />
         </NFormItem>
         <NFormItem label="角色状态" path="status">
@@ -114,9 +131,28 @@ watch(visible, () => {
       </NForm>
       <NSpace v-if="isEdit">
         <NButton @click="openMenuAuthModal">菜单权限</NButton>
-        <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
+        <MenuAuthModal
+          v-model:visible="menuAuthVisible"
+          :role-id="roleId"
+          :checked="menuIds.length ? menuIds : props.rowData?.menuIds"
+          @submitted="updateMenuIdsInfo"
+        />
         <NButton @click="openButtonAuthModal">按钮权限</NButton>
-        <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
+        <ButtonAuthModal
+          v-model:visible="buttonAuthVisible"
+          type="buttons"
+          :role-id="roleId"
+          :checked="buttonCodes.length ? buttonCodes : props.rowData?.buttonCodes"
+          @submitted="updatePermissionInfo"
+        />
+        <NButton @click="openInterfaceAuthModal">接口权限</NButton>
+        <ButtonAuthModal
+          v-model:visible="interfaceAuthVisible"
+          type="interfaces"
+          :role-id="roleId"
+          :checked="interfaceCodes.length ? interfaceCodes : props.rowData?.interfaceCodes"
+          @submitted="updatePermissionInfo"
+        />
       </NSpace>
       <template #footer>
         <NSpace :size="16">

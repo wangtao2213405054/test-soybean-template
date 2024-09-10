@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { shallowRef, watch } from "vue"
-import { fetchGetAllPages, fetchGetMenuTree } from "@/service/api"
+import { editRolePermissionInfo, fetchGetMenuTree } from "@/service/api"
+import { addIsLeafToTreeNodes } from "@/utils/common"
 
 defineOptions({
   name: "MenuAuthModal"
@@ -9,7 +10,14 @@ defineOptions({
 interface Props {
   /** the roleId */
   roleId: number
+  checked?: number[]
 }
+
+interface Emits {
+  (e: "submitted", role: SystemManage.Role): void
+}
+
+const emit = defineEmits<Emits>()
 
 const props = defineProps<Props>()
 
@@ -19,16 +27,6 @@ const visible = defineModel<boolean>("visible", {
 
 function closeModal() {
   visible.value = false
-}
-
-const pages = shallowRef<string[]>([])
-
-async function getPages() {
-  const { error, data } = await fetchGetAllPages()
-
-  if (!error) {
-    pages.value = data
-  }
 }
 
 const tree = shallowRef<SystemManage.MenuTree[]>([])
@@ -43,23 +41,21 @@ async function getTree() {
 
 const checks = shallowRef<number[]>([])
 
-async function getChecks() {
-  console.log(props.roleId)
-  // request
-  checks.value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+function getChecks() {
+  checks.value = props.checked || []
 }
 
-function handleSubmit() {
-  console.log(checks.value, props.roleId)
-  // request
+async function handleSubmit() {
+  const { error, data } = await editRolePermissionInfo({ menuIds: checks.value, id: props.roleId })
 
-  window.$message?.success?.("修改成功")
-
-  closeModal()
+  if (!error) {
+    window.$message?.success?.("修改成功")
+    emit("submitted", data)
+    closeModal()
+  }
 }
 
 function init() {
-  getPages()
   getTree()
   getChecks()
 }
@@ -75,7 +71,7 @@ watch(visible, (val) => {
   <NModal v-model:show="visible" title="编辑菜单权限" preset="card" class="w-480px">
     <NTree
       v-model:checked-keys="checks"
-      :data="tree"
+      :data="addIsLeafToTreeNodes(tree)"
       key-field="id"
       label-field="menuName"
       checkable

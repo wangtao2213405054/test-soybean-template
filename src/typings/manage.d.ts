@@ -8,9 +8,9 @@ declare namespace SystemManage {
     /** 路由列表 */
     menuIds: number[]
     /** 接口权限code列表 */
-    interfaceCodes: number[]
+    interfaceCodes: string[]
     /** 按钮权限code列表 */
-    buttonCodes: number[]
+    buttonCodes: string[]
   }>
 
   /** 角色搜索参数 */
@@ -66,6 +66,8 @@ declare namespace SystemManage {
    * - 2: 菜单
    */
   type MenuType = 1 | 2
+
+  type MenuPermissionType = "buttons" | "interfaces"
 
   /** 菜单权限 */
   type MenuPermission = {

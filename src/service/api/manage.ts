@@ -7,7 +7,7 @@ import { request } from "../request"
  */
 export function fetchGetRoleList(data?: SystemManage.RoleSearchParams) {
   return request<SystemManage.RoleList>({
-    url: "/manage/role/list",
+    url: "/manage/getRoleList",
     method: "POST",
     data
   })
@@ -20,7 +20,7 @@ export function fetchGetRoleList(data?: SystemManage.RoleSearchParams) {
  */
 export function editRoleInfo(data: SystemManage.RoleEdit) {
   return request<SystemManage.Role>({
-    url: "/manage/role/edit",
+    url: "/manage/editRoleInfo",
     method: "PUT",
     data
   })
@@ -33,7 +33,7 @@ export function editRoleInfo(data: SystemManage.RoleEdit) {
  */
 export function editRolePermissionInfo(data: SystemManage.RoleUpdatePermission) {
   return request<SystemManage.Role>({
-    url: "/manage/role/permission",
+    url: "/manage/updateRolePermission",
     method: "PUT",
     data
   })
@@ -46,7 +46,7 @@ export function editRolePermissionInfo(data: SystemManage.RoleUpdatePermission) 
  */
 export function deleteRoleInfo(id: number) {
   return request<SystemManage.Role>({
-    url: "/manage/role/delete",
+    url: "/manage/deleteRole",
     method: "DELETE",
     data: { id }
   })
@@ -59,7 +59,7 @@ export function deleteRoleInfo(id: number) {
  */
 export function fetchGetMenuList(data: Api.Common.CommonSearchParams) {
   return request<SystemManage.MenuList>({
-    url: "/manage/menu/list",
+    url: "/manage/getMenuList",
     method: "POST",
     data
   })
@@ -72,7 +72,7 @@ export function fetchGetMenuList(data: Api.Common.CommonSearchParams) {
  */
 export function editMenuInfo(data: SystemManage.MenuEdit) {
   return request<SystemManage.Menu>({
-    url: "/manage/menu/edit",
+    url: "/manage/editMenuInfo",
     method: "PUT",
     data
   })
@@ -85,7 +85,7 @@ export function editMenuInfo(data: SystemManage.MenuEdit) {
  */
 export function deleteMenuInfo(id: number) {
   return request<SystemManage.MenuList>({
-    url: "/manage/menu/delete",
+    url: "/manage/deleteMenu",
     method: "DELETE",
     data: { id }
   })
@@ -98,7 +98,7 @@ export function deleteMenuInfo(id: number) {
  */
 export function batchDeleteMenuInfo(ids: number[]) {
   return request<SystemManage.MenuList>({
-    url: "/manage/menu/batch/delete",
+    url: "/manage/batchDeleteMenu",
     method: "DELETE",
     data: { ids }
   })
@@ -111,7 +111,7 @@ export function batchDeleteMenuInfo(ids: number[]) {
  */
 export function fetchGetAllPages() {
   return request<string[]>({
-    url: "/manage/page/all",
+    url: "/manage/getPageAll",
     method: "GET"
   })
 }
@@ -123,7 +123,20 @@ export function fetchGetAllPages() {
  */
 export function fetchGetMenuTree() {
   return request<SystemManage.MenuTree[]>({
-    url: "/manage/menu/all",
+    url: "/manage/getRouterMenuAll",
     method: "GET"
+  })
+}
+
+/**
+ * 获取权限菜单列表
+ *
+ * @returns 返回菜单树的请求结果
+ */
+export function getPermissionMenuList(menuType: SystemManage.MenuPermissionType) {
+  return request<SystemManage.MenuPermission[]>({
+    url: "/manage/getPermissionMenuAll",
+    method: "POST",
+    data: { menuType }
   })
 }

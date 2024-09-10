@@ -54,3 +54,15 @@ export function toggleHtmlClass(className: string) {
     remove
   }
 }
+
+export function addIsLeafToTreeNodes(data: Api.Common.TreeNode[]) {
+  return data.map((node) => {
+    if (node.children && node.children.length > 0) {
+      node.isLeaf = false
+      node.children = addIsLeafToTreeNodes(node.children)
+    } else {
+      node.isLeaf = true
+    }
+    return node
+  })
+}

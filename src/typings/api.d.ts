@@ -15,6 +15,12 @@ declare namespace Api {
       total: number
     }
 
+    type TreeNode = {
+      children?: TreeNode[]
+      isLeaf?: boolean
+      [key: string]: any
+    }
+
     /** 分页查询记录的公共参数 */
     interface PaginatingQueryRecord<T = any> extends PaginatingCommonParams {
       /** 记录列表 */
