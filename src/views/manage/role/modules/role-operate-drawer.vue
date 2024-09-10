@@ -3,6 +3,7 @@ import { computed, reactive, watch } from "vue"
 import { useBoolean } from "@sa/hooks"
 import { useFormRules, useNaiveForm } from "@/hooks/common/form"
 import { enableStatusOptions } from "@/constants/business"
+import { editRoleInfo } from "@/service/api"
 import MenuAuthModal from "./menu-auth-modal.vue"
 import ButtonAuthModal from "./button-auth-modal.vue"
 
@@ -42,24 +43,22 @@ const title = computed(() => {
   return titles[props.operateType]
 })
 
-type Model = Pick<SystemManage.Role, "roleName" | "roleCode" | "roleDesc" | "status">
+type Model = Pick<SystemManage.Role, "name" | "describe" | "status">
 
 const model: Model = reactive(createDefaultModel())
 
 function createDefaultModel(): Model {
   return {
-    roleName: "",
-    roleCode: "",
-    roleDesc: "",
-    status: null
+    name: "",
+    describe: "",
+    status: true
   }
 }
 
-type RuleKey = Exclude<keyof Model, "roleDesc">
+type RuleKey = Exclude<keyof Model, "describe">
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
-  roleName: defaultRequiredRule,
-  roleCode: defaultRequiredRule,
+  name: defaultRequiredRule,
   status: defaultRequiredRule
 }
 
@@ -81,10 +80,12 @@ function closeDrawer() {
 
 async function handleSubmit() {
   await validate()
-  // request
-  window.$message?.success("更新成功")
-  closeDrawer()
-  emit("submitted")
+  const { error } = await editRoleInfo(model)
+  if (!error) {
+    window.$message?.success("更新成功")
+    closeDrawer()
+    emit("submitted")
+  }
 }
 
 watch(visible, () => {
@@ -100,10 +101,7 @@ watch(visible, () => {
     <NDrawerContent :title="title" :native-scrollbar="false" closable>
       <NForm ref="formRef" :model="model" :rules="rules">
         <NFormItem label="角色名称" path="roleName">
-          <NInput v-model:value="model.roleName" placeholder="请输入角色名称" />
-        </NFormItem>
-        <NFormItem label="角色编码" path="roleCode">
-          <NInput v-model:value="model.roleCode" placeholder="请输入角色编码" />
+          <NInput v-model:value="model.name" placeholder="请输入角色名称" />
         </NFormItem>
         <NFormItem label="角色状态" path="status">
           <NRadioGroup v-model:value="model.status">
@@ -111,7 +109,7 @@ watch(visible, () => {
           </NRadioGroup>
         </NFormItem>
         <NFormItem label="角色描述" path="roleDesc">
-          <NInput v-model:value="model.roleDesc" placeholder="请输入角色描述" />
+          <NInput v-model:value="model.describe" placeholder="请输入角色描述" />
         </NFormItem>
       </NForm>
       <NSpace v-if="isEdit">

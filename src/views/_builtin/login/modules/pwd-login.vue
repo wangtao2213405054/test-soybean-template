@@ -19,8 +19,8 @@ interface FormModel {
 }
 
 const model: FormModel = reactive({
-  userName: "Soybean",
-  password: "123456"
+  userName: "admin@admin.com",
+  password: "w123456"
 })
 
 const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {

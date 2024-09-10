@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { NButton, NPopconfirm, NTag } from "naive-ui"
-import { fetchGetRoleList } from "@/service/api"
+import { deleteRoleInfo, fetchGetRoleList } from "@/service/api"
 import { useAppStore } from "@/store/modules/app"
 import { useTable, useTableOperate } from "@/hooks/common/table"
 import { enableStatusRecord } from "@/constants/business"
@@ -22,13 +22,10 @@ const {
 } = useTable({
   apiFn: fetchGetRoleList,
   apiParams: {
-    current: 1,
-    size: 10,
-    // if you want to use the searchParams in Form, you need to define the following properties, and the value is null
-    // the value can not be undefined, otherwise the property in Form will not be reactive
+    page: 1,
+    pageSize: 20,
     status: null,
-    roleName: null,
-    roleCode: null
+    keyword: null
   },
   columns: () => [
     {
@@ -43,19 +40,13 @@ const {
       align: "center"
     },
     {
-      key: "roleName",
+      key: "name",
       title: "角色名称",
       align: "center",
       minWidth: 120
     },
     {
-      key: "roleCode",
-      title: "角色编码",
-      align: "center",
-      minWidth: 120
-    },
-    {
-      key: "roleDesc",
+      key: "describe",
       title: "角色描述",
       minWidth: 120
     },
@@ -69,14 +60,16 @@ const {
           return null
         }
 
+        const status = row.status ? 1 : 2
+
         const tagMap: Record<Api.Common.EnableStatus, NaiveUI.ThemeColor> = {
           1: "success",
           2: "warning"
         }
 
-        const label = enableStatusRecord[row.status]
+        const label = enableStatusRecord[status]
 
-        return <NTag type={tagMap[row.status]}>{label}</NTag>
+        return <NTag type={tagMap[status]}>{label}</NTag>
       }
     },
     {
@@ -121,14 +114,15 @@ async function handleBatchDelete() {
   // request
   console.log(checkedRowKeys.value)
 
-  onBatchDeleted()
+  await onBatchDeleted()
 }
 
-function handleDelete(id: number) {
-  // request
-  console.log(id)
+async function handleDelete(id: number) {
+  const { error } = await deleteRoleInfo(id)
 
-  onDeleted()
+  if (!error) {
+    await onDeleted()
+  }
 }
 
 function edit(id: number) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, shallowRef, watch } from "vue"
+import { shallowRef, watch } from "vue"
 import { fetchGetAllPages, fetchGetMenuTree } from "@/service/api"
 
 defineOptions({
@@ -21,20 +21,6 @@ function closeModal() {
   visible.value = false
 }
 
-const home = shallowRef("")
-
-async function getHome() {
-  console.log(props.roleId)
-
-  home.value = "home"
-}
-
-async function updateHome(val: string) {
-  // request
-
-  home.value = val
-}
-
 const pages = shallowRef<string[]>([])
 
 async function getPages() {
@@ -44,15 +30,6 @@ async function getPages() {
     pages.value = data
   }
 }
-
-const pageSelectOptions = computed(() => {
-  const opts: CommonType.Option[] = pages.value.map((page) => ({
-    label: page,
-    value: page
-  }))
-
-  return opts
-})
 
 const tree = shallowRef<SystemManage.MenuTree[]>([])
 
@@ -82,7 +59,6 @@ function handleSubmit() {
 }
 
 function init() {
-  getHome()
   getPages()
   getTree()
   getChecks()
@@ -97,14 +73,11 @@ watch(visible, (val) => {
 
 <template>
   <NModal v-model:show="visible" title="编辑菜单权限" preset="card" class="w-480px">
-    <div class="flex-y-center gap-16px pb-12px">
-      <div>首页</div>
-      <NSelect :value="home" :options="pageSelectOptions" size="small" class="w-160px" @update:value="updateHome" />
-    </div>
     <NTree
       v-model:checked-keys="checks"
       :data="tree"
       key-field="id"
+      label-field="menuName"
       checkable
       expand-on-click
       virtual-scroll

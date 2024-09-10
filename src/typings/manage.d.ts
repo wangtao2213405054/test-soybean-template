@@ -2,23 +2,29 @@ declare namespace SystemManage {
   /** 角色类型 */
   type Role = Api.Common.CommonRecord<{
     /** 角色名称 */
-    roleName: string
-    /** 角色代码 */
-    roleCode: string
+    name: string
     /** 角色描述 */
-    roleDesc: string
+    describe: string
+    /** 路由列表 */
+    menuIds: number[]
+    /** 接口权限code列表 */
+    interfaceCodes: number[]
+    /** 按钮权限code列表 */
+    buttonCodes: number[]
   }>
 
   /** 角色搜索参数 */
-  type RoleSearchParams = CommonType.RecordNullable<
-    Pick<Role, "roleName" | "roleCode" | "status"> & Api.Common.CommonSearchParams
-  >
+  type RoleSearchParams = CommonType.RecordNullable<Pick<Role, "status"> & Api.Common.CommonSearchParams>
+
+  type RoleEdit = { id?: number } & Pick<Role, "status" | "name" | "describe">
+
+  type RoleUpdatePermission = Pick<Role, "id"> & Partial<Pick<Role, "menuIds" | "interfaceCodes" | "buttonCodes">>
 
   /** 角色列表 */
   type RoleList = Api.Common.PaginatingQueryRecord<Role>
 
   /** 所有角色的简化类型 */
-  type AllRole = Pick<Role, "id" | "roleName" | "roleCode">
+  type AllRole = Pick<Role, "id" | "name" | "describe">
 
   /**
    * 用户性别
@@ -134,9 +140,9 @@ declare namespace SystemManage {
     /** 菜单 ID */
     id: number
     /** 菜单标签 */
-    label: string
+    menuName: string
     /** 父菜单 ID */
-    pId: number
+    nodeId: number
     /** 子菜单树 */
     children?: MenuTree[]
   }

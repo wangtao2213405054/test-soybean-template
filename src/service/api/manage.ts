@@ -3,42 +3,52 @@ import { request } from "../request"
 /**
  * 获取角色列表
  *
- * @param params 可选的请求参数，用于过滤角色列表
  * @returns 返回角色列表的请求结果
  */
-export function fetchGetRoleList(params?: SystemManage.RoleSearchParams) {
+export function fetchGetRoleList(data?: SystemManage.RoleSearchParams) {
   return request<SystemManage.RoleList>({
-    url: "/systemManage/getRoleList", // 请求的 URL 地址
-    method: "get", // 请求的方法，GET 表示获取数据
-    params // 请求的参数，用于筛选角色列表
+    url: "/manage/role/list",
+    method: "POST",
+    data
   })
 }
 
 /**
- * 获取所有角色
+ * 添加/修改角色
  *
- * 返回的角色都是启用状态的
- *
- * @returns 返回所有角色的请求结果
+ * @returns 返回编辑角色后的请求结果
  */
-export function fetchGetAllRoles() {
-  return request<SystemManage.AllRole[]>({
-    url: "/systemManage/getAllRoles", // 请求的 URL 地址
-    method: "get" // 请求的方法，GET 表示获取数据
+export function editRoleInfo(data: SystemManage.RoleEdit) {
+  return request<SystemManage.Role>({
+    url: "/manage/role/edit",
+    method: "PUT",
+    data
   })
 }
 
 /**
- * 获取用户列表
+ * 修改角色绑定权限信息
  *
- * @param params 可选的请求参数，用于过滤用户列表
- * @returns 返回用户列表的请求结果
+ * @returns 返回编辑角色后的请求结果
  */
-export function fetchGetUserList(params?: SystemManage.UserSearchParams) {
-  return request<SystemManage.UserList>({
-    url: "/systemManage/getUserList", // 请求的 URL 地址
-    method: "get", // 请求的方法，GET 表示获取数据
-    params // 请求的参数，用于筛选用户列表
+export function editRolePermissionInfo(data: SystemManage.RoleUpdatePermission) {
+  return request<SystemManage.Role>({
+    url: "/manage/role/permission",
+    method: "PUT",
+    data
+  })
+}
+
+/**
+ * 删除角色
+ *
+ * @returns 返回删除后的角色
+ */
+export function deleteRoleInfo(id: number) {
+  return request<SystemManage.Role>({
+    url: "/manage/role/delete",
+    method: "DELETE",
+    data: { id }
   })
 }
 
@@ -113,7 +123,7 @@ export function fetchGetAllPages() {
  */
 export function fetchGetMenuTree() {
   return request<SystemManage.MenuTree[]>({
-    url: "/systemManage/getMenuTree", // 请求的 URL 地址
-    method: "get" // 请求的方法，GET 表示获取数据
+    url: "/manage/menu/all",
+    method: "GET"
   })
 }

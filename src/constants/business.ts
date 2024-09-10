@@ -5,7 +5,16 @@ export const enableStatusRecord: Record<Api.Common.EnableStatus, string> = {
   2: "禁用"
 }
 
-export const enableStatusOptions = transformRecordToOption(enableStatusRecord)
+export const enableStatusOptions = [
+  {
+    label: "启用",
+    value: true
+  },
+  {
+    label: "禁用",
+    value: false
+  }
+]
 
 export const userGenderRecord: Record<SystemManage.UserGender, string> = {
   1: "男",

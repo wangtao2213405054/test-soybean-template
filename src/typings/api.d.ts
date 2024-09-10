@@ -22,7 +22,7 @@ declare namespace Api {
     }
 
     /** 表格的公共搜索参数 */
-    type CommonSearchParams = Pick<Common.PaginatingCommonParams, "page" | "pageSize">
+    type CommonSearchParams = Pick<Common.PaginatingCommonParams, "page" | "pageSize"> & { keyword: string }
 
     /**
      * 启用状态
@@ -32,17 +32,21 @@ declare namespace Api {
      */
     type EnableStatus = "1" | "2"
 
+    type CommonExclude = {
+      /** 记录创建时间 */
+      createTime: string
+      /** 记录更新时间 */
+      updateTime: string
+    }
+
     /** 公共记录 */
     type CommonRecord<T = any> = {
       /** 记录 ID */
       id: number
-      /** 记录创建时间 */
-      createTime?: string
-      /** 记录更新时间 */
-      updateTime?: string
       /** 记录状态 */
       status: boolean | null
-    } & T
+    } & CommonExclude &
+      T
   }
 
   /**
