@@ -401,8 +401,13 @@ watch(
             <NDynamicInput v-model:value="model.buttons" :on-create="handleCreatePermission">
               <template #default="{ value }">
                 <div class="ml-8px flex-y-center flex-1 gap-12px">
-                  <NInput v-model:value="value['code']" placeholder="请输入按钮编码" class="flex-1" />
-                  <NInput v-model:value="value['description']" placeholder="请输入按钮描述" class="flex-1" />
+                  <NInputGroup>
+                    <NInputGroupLabel>manage.role.</NInputGroupLabel>
+                    <NInput v-model:value="value['code']" placeholder="请输入按钮编码" class="flex-1" />
+                  </NInputGroup>
+                  <NInputGroup>
+                    <NInput v-model:value="value['description']" placeholder="请输入按钮描述" class="flex-1" />
+                  </NInputGroup>
                 </div>
               </template>
               <template #action="{ index, create, remove }">
