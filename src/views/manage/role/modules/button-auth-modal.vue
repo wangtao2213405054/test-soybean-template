@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { shallowRef, watch } from "vue"
+import { shallowRef, watch, computed } from "vue"
 import { editRolePermissionInfo, getPermissionMenuList } from "@/service/api"
+import { addIsLeafToTreeNodes } from "@/utils/common"
 
 defineOptions({
   name: "ButtonAuthModal"
@@ -28,6 +29,8 @@ const visible = defineModel<boolean>("visible", {
 function closeModal() {
   visible.value = false
 }
+
+const title = computed(() => (props.type === "buttons" ? "按钮" : "接口"))
 
 const tree = shallowRef<SystemManage.MenuPermission[]>([])
 
@@ -78,16 +81,18 @@ watch(visible, (val) => {
 </script>
 
 <template>
-  <NModal v-model:show="visible" title="编辑按钮权限" preset="card" class="w-480px">
+  <NModal v-model:show="visible" :title="`编辑${title}权限`" preset="card" class="w-480px">
     <NTree
       v-model:checked-keys="checks"
-      :data="tree"
-      key-field="code"
-      label-field="description"
+      :data="addIsLeafToTreeNodes(tree)"
+      key-field="value"
+      label-field="label"
+      show-line
       block-line
       checkable
       expand-on-click
       virtual-scroll
+      default-expand-all
       class="h-280px"
     />
     <template #footer>

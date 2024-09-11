@@ -65,8 +65,8 @@ const rules: Record<RuleKey, App.Global.FormRule> = {
 
 const roleId = computed(() => props.rowData?.id || -1)
 const menuIds = ref<number[]>([])
-const buttonCodes = ref<str[]>([])
-const interfaceCodes = ref<str[]>([])
+const buttonCodes = ref<string[]>([])
+const interfaceCodes = ref<string[]>([])
 
 const isEdit = computed(() => props.operateType === "edit")
 
