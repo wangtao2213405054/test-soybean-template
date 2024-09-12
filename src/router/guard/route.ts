@@ -44,7 +44,7 @@ export function createRouteGuard(router: Router) {
     const routeRoles = to.meta.roles || []
 
     /** 用户是否具有访问该路由的角色 */
-    const hasRole = authStore.userInfo.roles.some((role) => routeRoles.includes(role))
+    const hasRole = authStore.userInfo.roles.some((role: string) => routeRoles.includes(role))
 
     /** 用户是否有访问权限 */
     const hasAuth = authStore.isStaticSuper || !routeRoles.length || hasRole

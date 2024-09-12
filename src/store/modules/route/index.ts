@@ -246,20 +246,18 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     const { data, error } = await fetchGetUserRoutes()
 
     if (!error) {
-      const { routes, home } = data
-
-      addAuthRoutes(routes)
+      addAuthRoutes(data)
 
       handleConstantAndAuthRoutes()
 
-      setRouteHome(home)
+      setRouteHome("project")
 
-      handleUpdateRootRouteRedirect(home)
+      handleUpdateRootRouteRedirect("project")
 
       setIsInitAuthRoute(true)
     } else {
       // 如果获取用户路由失败，重置 store
-      authStore.resetStore()
+      await authStore.resetStore()
     }
   }
 

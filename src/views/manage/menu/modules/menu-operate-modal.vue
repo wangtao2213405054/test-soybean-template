@@ -178,8 +178,12 @@ function handleInitModel() {
   if (!props.rowData) return
 
   if (props.operateType === "addChild") {
-    const { id } = props.rowData
-    Object.assign(model, { nodeId: id })
+    const { id, routeName } = props.rowData
+    Object.assign(model, {
+      nodeId: id,
+      routeName: `${routeName}_`,
+      routePath: `${getRoutePathByRouteName(routeName)}/`
+    })
   }
 
   if (props.operateType === "edit") {
