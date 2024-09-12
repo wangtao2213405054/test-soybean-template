@@ -66,7 +66,7 @@ declare namespace Api {
     /** 菜单路由 */
     interface MenuRoute extends ElegantConstRoute {
       /** 路由 ID */
-      id: string
+      id: number
     }
 
     /** 用户路由 */
