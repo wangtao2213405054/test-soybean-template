@@ -83,7 +83,10 @@ const { columns, columnChecks, data, loading, pagination, getData, getDataByPage
       key: "routePath",
       title: "路由路径",
       align: "center",
-      minWidth: 120
+      minWidth: 120,
+      ellipsis: {
+        tooltip: true
+      }
     },
     {
       key: "status",

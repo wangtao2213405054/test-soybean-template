@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { NButton, NPopconfirm, NTag } from "naive-ui"
-import { deleteRoleInfo, fetchGetRoleList } from "@/service/api"
+import { batchDeleteRoleInfo, deleteRoleInfo, fetchGetRoleList } from "@/service/api"
 import { useAppStore } from "@/store/modules/app"
 import { useTable, useTableOperate } from "@/hooks/common/table"
 import { enableStatusRecord } from "@/constants/business"
@@ -110,13 +110,16 @@ const {
   // closeDrawer
 } = useTableOperate(data, getData)
 
+/** 批量删除 */
 async function handleBatchDelete() {
-  // request
-  console.log(checkedRowKeys.value)
+  const { error } = await batchDeleteRoleInfo(checkedRowKeys.value)
 
-  await onBatchDeleted()
+  if (!error) {
+    await onBatchDeleted()
+  }
 }
 
+/** 删除指定角色 */
 async function handleDelete(id: number) {
   const { error } = await deleteRoleInfo(id)
 
@@ -125,6 +128,7 @@ async function handleDelete(id: number) {
   }
 }
 
+/** 编辑 */
 function edit(id: number) {
   handleEdit(id)
 }

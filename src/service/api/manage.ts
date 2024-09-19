@@ -53,6 +53,19 @@ export function deleteRoleInfo(id: number) {
 }
 
 /**
+ * 批量删除菜单
+ *
+ * @returns 返回删除后的菜单列表
+ */
+export function batchDeleteRoleInfo(ids: number[]) {
+  return request<SystemManage.RoleList>({
+    url: "/manage/batchDeleteRole",
+    method: "DELETE",
+    data: { ids }
+  })
+}
+
+/**
  * 获取菜单列表
  *
  * @returns 返回菜单列表的请求结果
