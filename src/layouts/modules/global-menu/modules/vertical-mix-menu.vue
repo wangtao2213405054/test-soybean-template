@@ -115,7 +115,7 @@ const childMenus = computed(() =>
           :style="{ width: showDrawer ? themeStore.sider.mixChildMenuWidth + 'px' : '0px' }"
         >
           <header class="flex-y-center justify-between px-12px" :style="{ height: themeStore.header.height + 'px' }">
-            <h2 class="text-16px text-primary font-bold">Soybean 管理系统</h2>
+            <h2 class="text-16px text-primary font-bold">Criminal 自动化平台</h2>
             <PinToggler
               :pin="appStore.mixSiderFixed"
               :class="{ 'text-white:88 !hover:text-white': inverted }"

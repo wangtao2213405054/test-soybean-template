@@ -41,7 +41,7 @@ export function setupLoading() {
       ${dot}
     </div>
   </div>
-  <h2 class="text-28px font-500 text-#646464">Soybean 管理系统</h2>
+  <h2 class="text-28px font-500 text-#646464">Criminal 自动化平台</h2>
 </div>`
 
   // 将加载动画插入到页面中
